@@ -1,0 +1,61 @@
+ApexCloud SaaS Services - Terms of Service
+
+1. Acceptance of Agreement
+By registering for, accessing, or using the ApexCloud platform, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service. If you do not agree, you must immediately discontinue all use of the platform.
+
+2. User Account Security and Password
+To access the services, you must register for an account with valid contact credentials. You are solely responsible for maintaining the confidentiality of your account login credentials and passwords, and you accept responsibility for all activities that occur under your account.
+
+3. Immediate Account Termination
+We reserve the right to suspend or terminate your account immediately at our sole discretion, without prior notice or liability, for any conduct that we determine violates these Terms or harms other users.
+
+4. Account Closure and Data Forfeiture
+Upon termination of your account by either party, your access to the service will cease immediately and all stored workspace files and configuration data will be permanently deleted without possibility of recovery.
+
+5. Subscription Billing and Auto-Renewal
+All paid plans are billed in advance on a recurring monthly or annual basis. Your subscription will automatically renew at the end of each billing cycle unless you cancel it at least thirty (30) days prior to the expiration date.
+
+6. Non-Refundable Payment Policy
+All subscription fees paid to ApexCloud are strictly non-refundable, and no credits or prorated refunds will be issued for partial billing periods or unused accounts.
+
+7. Unilateral Price and Feature Changes
+We reserve the right, at our sole discretion, to modify our subscription fees and change service pricing at any time without prior individual notice to users.
+
+8. User Content License Grant
+By submitting, uploading, or displaying content on or through the service, you grant ApexCloud a worldwide, perpetual, irrevocable, royalty-free, transferable, and sublicensable license to use, reproduce, modify, adapt, publish, translate, and distribute such content in connection with operating the service.
+
+9. User Content Representations and Warranties
+You represent and warrant that you own or have obtained all necessary intellectual property rights and permissions for all content you submit to the service, and that such content does not infringe any third-party copyrights or trademarks.
+
+10. Unilateral Modification of Terms
+We reserve the right to modify or replace these Terms at any time without prior individual notice. Your continued use of the service following the posting of any changes constitutes binding acceptance of those revised terms.
+
+11. Notice of Material Modifications
+Notwithstanding any other provision, for material changes affecting subscription pricing or customer data usage, we will endeavor to provide thirty (30) days advance notice via email or platform dashboard prior to the revision taking effect.
+
+12. Personal Data Collection and Telemetry
+We collect personal information, usage logs, device telemetry, and analytics regarding your interactions with the platform to operate and optimize the service in accordance with our Privacy Policy.
+
+13. Third-Party Data Sharing
+We may share your personal data, telemetry, and behavioral analytics with third-party advertising partners and analytics vendors for cross-site tracking and commercial profiling.
+
+14. Post-Termination Data Retention
+Following the closure or termination of your account, we may retain your personal data and transaction records for up to seven (7) years to comply with statutory legal obligations and resolve potential disputes.
+
+15. Standard Cookie Notice
+We use cookies to improve experience and maintain user sessions across platform workflows.
+
+16. Warranty Disclaimer
+The services are provided strictly on an as-is and as-available basis, without warranty of any kind, whether express, implied, or statutory, including implied warranties of merchantability or fitness for a particular purpose.
+
+17. Limitation of Liability and Damage Cap
+To the maximum extent permitted by applicable law, in no event shall ApexCloud or its officers be liable for any special, incidental, indirect, or consequential damages whatsoever, and our aggregate liability for all claims shall not exceed fifty US dollars ($50.00).
+
+18. Mandatory Binding Individual Arbitration
+Any dispute, claim, or controversy arising out of or relating to these Terms shall be resolved exclusively through final and binding individual arbitration administered by the American Arbitration Association.
+
+19. Class Action and Jury Trial Waiver
+You expressly waive any right to initiate, join, or participate in any class action lawsuit, collective arbitration, or representative proceeding against ApexCloud.
+
+20. Governing Law and Exclusive Venue
+These Terms shall be governed by and construed in accordance with the laws of the State of Delaware, and any court proceedings permitted under these Terms shall be brought exclusively in the state or federal courts located in Wilmington, Delaware.

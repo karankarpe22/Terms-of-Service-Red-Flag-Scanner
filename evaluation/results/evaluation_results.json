@@ -1,0 +1,1738 @@
+{
+  "metadata": {
+    "evaluation_phase": "Phase 9 - Evaluation & Benchmarking",
+    "timestamp": "2026-09-22 21:54:47",
+    "duration_seconds": 19.46,
+    "ground_truth_file": "evaluation/data/ground_truth.json",
+    "retrieval_gt_file": "evaluation/data/retrieval_ground_truth.json",
+    "qa_gt_file": "evaluation/data/qa_ground_truth.json"
+  },
+  "classification": {
+    "sample_size": 74,
+    "correct_predictions": 59,
+    "accuracy": 0.7973,
+    "macro_precision": 0.7707,
+    "macro_recall": 0.7869,
+    "macro_f1": 0.7592,
+    "per_class": {
+      "Privacy & Data": {
+        "precision": 1.0,
+        "recall": 0.9091,
+        "f1_score": 0.9524,
+        "support": 11,
+        "true_positives": 10,
+        "false_positives": 0,
+        "false_negatives": 1
+      },
+      "Payment": {
+        "precision": 0.7273,
+        "recall": 1.0,
+        "f1_score": 0.8421,
+        "support": 8,
+        "true_positives": 8,
+        "false_positives": 3,
+        "false_negatives": 0
+      },
+      "Account": {
+        "precision": 0.9091,
+        "recall": 0.8333,
+        "f1_score": 0.8696,
+        "support": 12,
+        "true_positives": 10,
+        "false_positives": 1,
+        "false_negatives": 2
+      },
+      "Dispute": {
+        "precision": 0.875,
+        "recall": 0.875,
+        "f1_score": 0.875,
+        "support": 8,
+        "true_positives": 7,
+        "false_positives": 1,
+        "false_negatives": 1
+      },
+      "Liability": {
+        "precision": 0.8182,
+        "recall": 0.9,
+        "f1_score": 0.8571,
+        "support": 10,
+        "true_positives": 9,
+        "false_positives": 2,
+        "false_negatives": 1
+      },
+      "User Content": {
+        "precision": 0.7,
+        "recall": 0.875,
+        "f1_score": 0.7778,
+        "support": 8,
+        "true_positives": 7,
+        "false_positives": 3,
+        "false_negatives": 1
+      },
+      "Changes": {
+        "precision": 0.6364,
+        "recall": 0.7778,
+        "f1_score": 0.7,
+        "support": 9,
+        "true_positives": 7,
+        "false_positives": 4,
+        "false_negatives": 2
+      },
+      "General": {
+        "precision": 0.5,
+        "recall": 0.125,
+        "f1_score": 0.2,
+        "support": 8,
+        "true_positives": 1,
+        "false_positives": 1,
+        "false_negatives": 7
+      }
+    },
+    "confusion_matrix": {
+      "labels": [
+        "Privacy & Data",
+        "Payment",
+        "Account",
+        "Dispute",
+        "Liability",
+        "User Content",
+        "Changes",
+        "General"
+      ],
+      "matrix": [
+        [
+          10,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          10,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          7,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          9,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          1,
+          7,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          0,
+          0,
+          0,
+          0,
+          7,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          0,
+          3,
+          3,
+          1
+        ]
+      ]
+    },
+    "mismatches": [
+      {
+        "clause_id": "doc_saas_cloud_clause_001",
+        "document_id": "doc_saas_cloud",
+        "section_title": "1. Acceptance of Agreement",
+        "expected": "General",
+        "predicted": "Changes",
+        "confidence": 0.44,
+        "snippet": "By registering for, accessing, or using the ApexCloud platform, you acknowledge that you have read, understood, and agre...",
+        "rationale": "Introductory acceptance of terms clause stating binding nature of agreement upon platform use."
+      },
+      {
+        "clause_id": "doc_saas_cloud_clause_007",
+        "document_id": "doc_saas_cloud",
+        "section_title": "7. Unilateral Price and Feature Changes",
+        "expected": "Changes",
+        "predicted": "Payment",
+        "confidence": 0.68,
+        "snippet": "We reserve the right, at our sole discretion, to modify our subscription fees and change service pricing at any time wit...",
+        "rationale": "Reserves right to modify subscription fees and change pricing at any time without prior individual notice."
+      },
+      {
+        "clause_id": "doc_saas_cloud_clause_009",
+        "document_id": "doc_saas_cloud",
+        "section_title": "9. User Content Representations and Warranties",
+        "expected": "User Content",
+        "predicted": "Liability",
+        "confidence": 0.51,
+        "snippet": "You represent and warrant that you own or have obtained all necessary intellectual property rights and permissions for a...",
+        "rationale": "User warranty that uploaded content does not infringe third-party copyrights or trademarks."
+      },
+      {
+        "clause_id": "doc_saas_cloud_clause_011",
+        "document_id": "doc_saas_cloud",
+        "section_title": "11. Notice of Material Modifications",
+        "expected": "Changes",
+        "predicted": "Payment",
+        "confidence": 0.61,
+        "snippet": "Notwithstanding any other provision, for material changes affecting subscription pricing or customer data usage, we will...",
+        "rationale": "Commitment to endeavor to provide 30 days notice for material changes to pricing or customer data usage."
+      },
+      {
+        "clause_id": "doc_saas_cloud_clause_014",
+        "document_id": "doc_saas_cloud",
+        "section_title": "14. Post-Termination Data Retention",
+        "expected": "Privacy & Data",
+        "predicted": "Account",
+        "confidence": 0.74,
+        "snippet": "Following the closure or termination of your account, we may retain your personal data and transaction records for up to...",
+        "rationale": "Retains personal data and transaction records for up to 7 years following account closure."
+      },
+      {
+        "clause_id": "doc_ecommerce_marketplace_clause_001",
+        "document_id": "doc_ecommerce_marketplace",
+        "section_title": "1. Introduction and Platform Scope",
+        "expected": "General",
+        "predicted": "User Content",
+        "confidence": 0.36,
+        "snippet": "Welcome to MarketGrid Commerce. By creating a merchant store or using our marketplace services, you enter into a legally...",
+        "rationale": "Introductory preamble establishing scope and legally binding nature of merchant terms."
+      },
+      {
+        "clause_id": "doc_ecommerce_marketplace_clause_004",
+        "document_id": "doc_ecommerce_marketplace",
+        "section_title": "4. Account Cancellation by Merchant",
+        "expected": "Account",
+        "predicted": "Payment",
+        "confidence": 0.38,
+        "snippet": "You may terminate your merchant store at any time through the merchant dashboard settings upon clearing all pending fulf...",
+        "rationale": "Allows merchant to cancel store at any time via dashboard upon fulfilling orders."
+      },
+      {
+        "clause_id": "doc_ecommerce_marketplace_clause_016",
+        "document_id": "doc_ecommerce_marketplace",
+        "section_title": "16. Exception for Small Claims and Intellectual Property",
+        "expected": "Dispute",
+        "predicted": "Liability",
+        "confidence": 0.48,
+        "snippet": "Except as provided in Section 15, either party may assert qualifying claims in small claims court or seek injunctive rel...",
+        "rationale": "Explicit exception permitting small claims court and injunctive relief for IP claims."
+      },
+      {
+        "clause_id": "doc_ecommerce_marketplace_clause_018",
+        "document_id": "doc_ecommerce_marketplace",
+        "section_title": "18. Severability and Entire Agreement",
+        "expected": "General",
+        "predicted": "Changes",
+        "confidence": 0.55,
+        "snippet": "If any provision of these terms is found unenforceable, the remaining provisions will remain in full force and effect....",
+        "rationale": "Standard boilerplate severability and entire agreement integration clause."
+      },
+      {
+        "clause_id": "doc_social_media_clause_001",
+        "document_id": "doc_social_media",
+        "section_title": "1. Welcome and Binding Agreement",
+        "expected": "General",
+        "predicted": "User Content",
+        "confidence": 0.36,
+        "snippet": "Welcome to PulseMedia. By accessing our mobile application or creating a member profile, you agree to these Terms of Ser...",
+        "rationale": "Welcome preamble and agreement to be bound by mobile application terms."
+      },
+      {
+        "clause_id": "doc_social_media_clause_018",
+        "document_id": "doc_social_media",
+        "section_title": "18. Headings for Convenience",
+        "expected": "General",
+        "predicted": "User Content",
+        "confidence": 0.35,
+        "snippet": "Section headings in this User Agreement are for convenience of reference only and carry no legal or contractual signific...",
+        "rationale": "Standard headings clause stating section titles have no contractual significance."
+      },
+      {
+        "clause_id": "doc_developer_api_clause_003",
+        "document_id": "doc_developer_api",
+        "section_title": "3. Immediate API Key Revocation",
+        "expected": "Account",
+        "predicted": "Changes",
+        "confidence": 0.38,
+        "snippet": "DataForge reserves the right to immediately suspend your API access or revoke your keys without notice for rate limit ab...",
+        "rationale": "Immediate API access revocation without notice for rate limit abuse or security issues."
+      },
+      {
+        "clause_id": "doc_developer_api_clause_013",
+        "document_id": "doc_developer_api",
+        "section_title": "13. Enterprise Agreement Precedence",
+        "expected": "General",
+        "predicted": "Dispute",
+        "confidence": 0.44,
+        "snippet": "In the event of conflict or inconsistency between these standard terms and an executed Enterprise Master Services Agreem...",
+        "rationale": "Precedence clause: signed Enterprise Master Agreement supersedes and controls over standard terms."
+      },
+      {
+        "clause_id": "doc_developer_api_clause_014",
+        "document_id": "doc_developer_api",
+        "section_title": "14. As-Is Service Disclaimer",
+        "expected": "Liability",
+        "predicted": "General",
+        "confidence": 0.27,
+        "snippet": "The API endpoints and associated developer tools are provided on an as-is and as-available basis, without warranties of ...",
+        "rationale": "As-is service disclaimer without warranties of uptime or API performance."
+      },
+      {
+        "clause_id": "doc_developer_api_clause_018",
+        "document_id": "doc_developer_api",
+        "section_title": "18. Severability",
+        "expected": "General",
+        "predicted": "Changes",
+        "confidence": 0.47,
+        "snippet": "If any term is held invalid by a competent tribunal, such invalidity shall not affect the enforceability of the remainin...",
+        "rationale": "Standard severability boilerplate clause preserving validity of surviving provisions."
+      }
+    ],
+    "class_imbalance_note": "Dataset contains 74 clauses distributed relatively evenly across 8 classes (8-12 clauses per class: Account=12, Privacy & Data=11, Liability=10, Changes=9, Dispute=8, Payment=8, User Content=8, General=8). Minor variance reflects natural ToS structure."
+  },
+  "attention": {
+    "sample_size": 74,
+    "correct_predictions": 41,
+    "accuracy": 0.5541,
+    "macro_precision": 0.71,
+    "macro_recall": 0.6412,
+    "macro_f1": 0.5816,
+    "per_class": {
+      "High Attention": {
+        "precision": 1.0,
+        "recall": 0.2647,
+        "f1_score": 0.4186,
+        "support": 34,
+        "true_positives": 9,
+        "false_positives": 0,
+        "false_negatives": 25
+      },
+      "Medium Attention": {
+        "precision": 0.2593,
+        "recall": 0.7,
+        "f1_score": 0.3784,
+        "support": 10,
+        "true_positives": 7,
+        "false_positives": 20,
+        "false_negatives": 3
+      },
+      "Low Attention": {
+        "precision": 1.0,
+        "recall": 0.7,
+        "f1_score": 0.8235,
+        "support": 10,
+        "true_positives": 7,
+        "false_positives": 0,
+        "false_negatives": 3
+      },
+      "Informational": {
+        "precision": 0.5806,
+        "recall": 0.9,
+        "f1_score": 0.7059,
+        "support": 20,
+        "true_positives": 18,
+        "false_positives": 13,
+        "false_negatives": 2
+      }
+    },
+    "confusion_matrix": {
+      "labels": [
+        "High Attention",
+        "Medium Attention",
+        "Low Attention",
+        "Informational"
+      ],
+      "matrix": [
+        [
+          9,
+          18,
+          0,
+          7
+        ],
+        [
+          0,
+          7,
+          0,
+          3
+        ],
+        [
+          0,
+          0,
+          7,
+          3
+        ],
+        [
+          0,
+          2,
+          0,
+          18
+        ]
+      ]
+    },
+    "heuristic_note": "Attention level reflects deterministic contractual indicators (e.g., auto-renewal, arbitration, liability disclaimers) requiring closer human review, NOT legal enforceability.",
+    "mismatches": [
+      {
+        "clause_id": "doc_saas_cloud_clause_004",
+        "document_id": "doc_saas_cloud",
+        "section_title": "4. Account Closure and Data Forfeiture",
+        "expected": "High Attention",
+        "predicted": "Informational",
+        "reasons": [
+          "Standard informational clause without high-attention contractual indicators."
+        ],
+        "snippet": "Upon termination of your account by either party, your access to the service will cease immediately and all stored works...",
+        "rationale": "Specifies immediate cessation of access and permanent irreversible deletion of stored user workspace files."
+      },
+      {
+        "clause_id": "doc_saas_cloud_clause_007",
+        "document_id": "doc_saas_cloud",
+        "section_title": "7. Unilateral Price and Feature Changes",
+        "expected": "High Attention",
+        "predicted": "Medium Attention",
+        "reasons": [
+          "Permits account action without liability or at sole company discretion"
+        ],
+        "snippet": "We reserve the right, at our sole discretion, to modify our subscription fees and change service pricing at any time wit...",
+        "rationale": "Reserves right to modify subscription fees and change pricing at any time without prior individual notice."
+      },
+      {
+        "clause_id": "doc_saas_cloud_clause_011",
+        "document_id": "doc_saas_cloud",
+        "section_title": "11. Notice of Material Modifications",
+        "expected": "Medium Attention",
+        "predicted": "Informational",
+        "reasons": [
+          "Standard informational clause without high-attention contractual indicators."
+        ],
+        "snippet": "Notwithstanding any other provision, for material changes affecting subscription pricing or customer data usage, we will...",
+        "rationale": "Commitment to endeavor to provide 30 days notice for material changes to pricing or customer data usage."
+      },
+      {
+        "clause_id": "doc_saas_cloud_clause_012",
+        "document_id": "doc_saas_cloud",
+        "section_title": "12. Personal Data Collection and Telemetry",
+        "expected": "Low Attention",
+        "predicted": "Informational",
+        "reasons": [
+          "Standard informational clause without high-attention contractual indicators."
+        ],
+        "snippet": "We collect personal information, usage logs, device telemetry, and analytics regarding your interactions with the platfo...",
+        "rationale": "Standard collection of user data, device telemetry, and analytics under privacy policy."
+      },
+      {
+        "clause_id": "doc_saas_cloud_clause_013",
+        "document_id": "doc_saas_cloud",
+        "section_title": "13. Third-Party Data Sharing",
+        "expected": "High Attention",
+        "predicted": "Medium Attention",
+        "reasons": [
+          "Discloses persistent user activity tracking or behavioral profiling"
+        ],
+        "snippet": "We may share your personal data, telemetry, and behavioral analytics with third-party advertising partners and analytics...",
+        "rationale": "Authorizes sharing personal data and telemetry with third-party ad partners for cross-site tracking and profiling."
+      },
+      {
+        "clause_id": "doc_saas_cloud_clause_014",
+        "document_id": "doc_saas_cloud",
+        "section_title": "14. Post-Termination Data Retention",
+        "expected": "High Attention",
+        "predicted": "Informational",
+        "reasons": [
+          "Standard informational clause without high-attention contractual indicators."
+        ],
+        "snippet": "Following the closure or termination of your account, we may retain your personal data and transaction records for up to...",
+        "rationale": "Retains personal data and transaction records for up to 7 years following account closure."
+      },
+      {
+        "clause_id": "doc_saas_cloud_clause_017",
+        "document_id": "doc_saas_cloud",
+        "section_title": "17. Limitation of Liability and Damage Cap",
+        "expected": "High Attention",
+        "predicted": "Medium Attention",
+        "reasons": [
+          "Caps maximum recoverable liability to a nominal amount or fees paid"
+        ],
+        "snippet": "To the maximum extent permitted by applicable law, in no event shall ApexCloud or its officers be liable for any special...",
+        "rationale": "Excludes consequential damages and severely caps total aggregate company liability at $50.00."
+      },
+      {
+        "clause_id": "doc_saas_cloud_clause_019",
+        "document_id": "doc_saas_cloud",
+        "section_title": "19. Class Action and Jury Trial Waiver",
+        "expected": "High Attention",
+        "predicted": "Medium Attention",
+        "reasons": [
+          "Includes a waiver of the right to participate in class action lawsuits"
+        ],
+        "snippet": "You expressly waive any right to initiate, join, or participate in any class action lawsuit, collective arbitration, or ...",
+        "rationale": "Express waiver of right to participate in class action lawsuits, collective arbitration, or representative claims."
+      },
+      {
+        "clause_id": "doc_ecommerce_marketplace_clause_003",
+        "document_id": "doc_ecommerce_marketplace",
+        "section_title": "3. Immediate Merchant Account Suspension",
+        "expected": "High Attention",
+        "predicted": "Medium Attention",
+        "reasons": [
+          "Allows immediate account suspension or termination without prior notice"
+        ],
+        "snippet": "MarketGrid reserves the right to suspend or terminate your merchant account immediately, without notice or liability, fo...",
+        "rationale": "Allows marketplace immediate account suspension without notice or liability for policy violations."
+      },
+      {
+        "clause_id": "doc_ecommerce_marketplace_clause_007",
+        "document_id": "doc_ecommerce_marketplace",
+        "section_title": "7. Unilateral Commission Fee Changes",
+        "expected": "High Attention",
+        "predicted": "Medium Attention",
+        "reasons": [
+          "Permits the service to sublicense, modify, or commercially distribute user submissions"
+        ],
+        "snippet": "We reserve the right to modify commission rates, transaction fees, and platform pricing at any time without prior indivi...",
+        "rationale": "Unilateral right to change commission rates and transaction pricing at any time without notice."
+      },
+      {
+        "clause_id": "doc_ecommerce_marketplace_clause_009",
+        "document_id": "doc_ecommerce_marketplace",
+        "section_title": "9. Merchant Indemnification Obligation",
+        "expected": "High Attention",
+        "predicted": "Medium Attention",
+        "reasons": [
+          "Obligates user to indemnify and hold the company harmless from claims"
+        ],
+        "snippet": "You agree to indemnify, defend, and hold harmless MarketGrid, its affiliates, and employees from any third-party claims,...",
+        "rationale": "Obligates merchant to indemnify, defend, and hold harmless marketplace from third-party product claims."
+      },
+      {
+        "clause_id": "doc_ecommerce_marketplace_clause_010",
+        "document_id": "doc_ecommerce_marketplace",
+        "section_title": "10. Limitation of Liability",
+        "expected": "High Attention",
+        "predicted": "Medium Attention",
+        "reasons": [
+          "Caps maximum recoverable liability to a nominal amount or fees paid"
+        ],
+        "snippet": "In no event shall MarketGrid be liable for any indirect, special, incidental, or consequential damages, and total aggreg...",
+        "rationale": "Excludes consequential damages and limits liability to fees paid in preceding three months."
+      },
+      {
+        "clause_id": "doc_ecommerce_marketplace_clause_013",
+        "document_id": "doc_ecommerce_marketplace",
+        "section_title": "13. Customer Data and Privacy Compliance",
+        "expected": "Low Attention",
+        "predicted": "Informational",
+        "reasons": [
+          "Standard informational clause without high-attention contractual indicators."
+        ],
+        "snippet": "Merchants must handle buyer personal information in compliance with our Privacy Policy and applicable data protection re...",
+        "rationale": "Requirement for merchants to handle customer data according to privacy policies."
+      },
+      {
+        "clause_id": "doc_ecommerce_marketplace_clause_014",
+        "document_id": "doc_ecommerce_marketplace",
+        "section_title": "14. Buyer Data Retention",
+        "expected": "High Attention",
+        "predicted": "Medium Attention",
+        "reasons": [
+          "Provides for prolonged or post-termination retention of personal data"
+        ],
+        "snippet": "We retain buyer transaction history and merchant audit logs for up to seven (7) years following account termination to s...",
+        "rationale": "Retains buyer transaction history and merchant logs for 7 years following account termination."
+      },
+      {
+        "clause_id": "doc_ecommerce_marketplace_clause_016",
+        "document_id": "doc_ecommerce_marketplace",
+        "section_title": "16. Exception for Small Claims and Intellectual Property",
+        "expected": "Medium Attention",
+        "predicted": "Informational",
+        "reasons": [
+          "Standard informational clause without high-attention contractual indicators."
+        ],
+        "snippet": "Except as provided in Section 15, either party may assert qualifying claims in small claims court or seek injunctive rel...",
+        "rationale": "Explicit exception permitting small claims court and injunctive relief for IP claims."
+      },
+      {
+        "clause_id": "doc_social_media_clause_003",
+        "document_id": "doc_social_media",
+        "section_title": "3. Account Deactivation",
+        "expected": "Informational",
+        "predicted": "Medium Attention",
+        "reasons": [
+          "Permits the company to terminate or suspend user accounts at any time"
+        ],
+        "snippet": "You may deactivate or terminate your account at any time through your mobile profile settings....",
+        "rationale": "Permits user to deactivate or terminate account at any time via profile settings."
+      },
+      {
+        "clause_id": "doc_social_media_clause_005",
+        "document_id": "doc_social_media",
+        "section_title": "5. Premium Memberships and Recurring Subscriptions",
+        "expected": "High Attention",
+        "predicted": "Informational",
+        "reasons": [
+          "Standard informational clause without high-attention contractual indicators."
+        ],
+        "snippet": "Premium memberships require recurring payment charges billed monthly and renew automatically unless cancelled at least 4...",
+        "rationale": "Premium subscription auto-renews recurring charges monthly unless cancelled 48 hours prior."
+      },
+      {
+        "clause_id": "doc_social_media_clause_007",
+        "document_id": "doc_social_media",
+        "section_title": "7. User Posts and Perpetual License Grant",
+        "expected": "High Attention",
+        "predicted": "Medium Attention",
+        "reasons": [
+          "Grants a perpetual, irrevocable, or royalty-free license to user content"
+        ],
+        "snippet": "By submitting or publishing photos, text, video, or comments on PulseMedia, you grant us a worldwide, perpetual, irrevoc...",
+        "rationale": "Demands worldwide, perpetual, irrevocable, royalty-free license to user posts, text, photos, and videos."
+      },
+      {
+        "clause_id": "doc_social_media_clause_008",
+        "document_id": "doc_social_media",
+        "section_title": "8. Commercialization and Sublicensing of User Submissions",
+        "expected": "High Attention",
+        "predicted": "Medium Attention",
+        "reasons": [
+          "Permits the service to sublicense, modify, or commercially distribute user submissions"
+        ],
+        "snippet": "PulseMedia reserves the transferable and sublicensable right to commercialize, display, and create derivative works from...",
+        "rationale": "Sublicensable and transferable right to commercialize user submissions for promotional ads."
+      },
+      {
+        "clause_id": "doc_social_media_clause_010",
+        "document_id": "doc_social_media",
+        "section_title": "10. Behavioral Advertising and Third-Party Data Sharing",
+        "expected": "High Attention",
+        "predicted": "Medium Attention",
+        "reasons": [
+          "Discloses persistent user activity tracking or behavioral profiling"
+        ],
+        "snippet": "We share personal data, browsing telemetry, and behavioral profile information with advertising networks for cross-site ...",
+        "rationale": "Shares personal data and browsing telemetry with ad networks for behavioral cross-site tracking."
+      },
+      {
+        "clause_id": "doc_social_media_clause_011",
+        "document_id": "doc_social_media",
+        "section_title": "11. Retention of Personal Records",
+        "expected": "High Attention",
+        "predicted": "Informational",
+        "reasons": [
+          "Standard informational clause without high-attention contractual indicators."
+        ],
+        "snippet": "Upon termination or deletion of your profile, we may retain personal data, usage logs, and interaction records indefinit...",
+        "rationale": "Retains personal data and interaction logs indefinitely after account deletion."
+      },
+      {
+        "clause_id": "doc_social_media_clause_015",
+        "document_id": "doc_social_media",
+        "section_title": "15. Consequential Damages Exclusion",
+        "expected": "Medium Attention",
+        "predicted": "Informational",
+        "reasons": [
+          "Standard informational clause without high-attention contractual indicators."
+        ],
+        "snippet": "In no event shall PulseMedia or its creators be liable for any special, consequential, or punitive damages arising from ...",
+        "rationale": "Excludes consequential, special, and punitive damages arising from platform use."
+      },
+      {
+        "clause_id": "doc_social_media_clause_016",
+        "document_id": "doc_social_media",
+        "section_title": "16. Class Action Lawsuit Waiver",
+        "expected": "High Attention",
+        "predicted": "Medium Attention",
+        "reasons": [
+          "Includes a waiver of the right to participate in class action lawsuits"
+        ],
+        "snippet": "You agree that any dispute resolution proceeding will be conducted solely on an individual basis and you waive any right...",
+        "rationale": "Waives right to participate in class action lawsuits or representative proceedings."
+      },
+      {
+        "clause_id": "doc_social_media_clause_017",
+        "document_id": "doc_social_media",
+        "section_title": "17. Exclusive Forum and Governing Law",
+        "expected": "Informational",
+        "predicted": "Medium Attention",
+        "reasons": [
+          "Restricts legal proceedings to a specific exclusive jurisdiction or venue"
+        ],
+        "snippet": "These terms are governed by the laws of the State of California, with exclusive venue in the state and federal courts lo...",
+        "rationale": "Governing California law and exclusive venue in San Francisco state/federal courts."
+      },
+      {
+        "clause_id": "doc_developer_api_clause_003",
+        "document_id": "doc_developer_api",
+        "section_title": "3. Immediate API Key Revocation",
+        "expected": "High Attention",
+        "predicted": "Medium Attention",
+        "reasons": [
+          "Allows immediate account suspension or termination without prior notice"
+        ],
+        "snippet": "DataForge reserves the right to immediately suspend your API access or revoke your keys without notice for rate limit ab...",
+        "rationale": "Immediate API access revocation without notice for rate limit abuse or security issues."
+      },
+      {
+        "clause_id": "doc_developer_api_clause_005",
+        "document_id": "doc_developer_api",
+        "section_title": "5. API Usage Tiers and Auto-Renewal",
+        "expected": "High Attention",
+        "predicted": "Informational",
+        "reasons": [
+          "Standard informational clause without high-attention contractual indicators."
+        ],
+        "snippet": "Developer subscriptions renew automatically on the first day of each calendar month, and recurring overage charges will ...",
+        "rationale": "Auto-renewal of usage tiers with recurring monthly overage fees billed directly."
+      },
+      {
+        "clause_id": "doc_developer_api_clause_007",
+        "document_id": "doc_developer_api",
+        "section_title": "7. Unilateral API Pricing Modifications",
+        "expected": "High Attention",
+        "predicted": "Medium Attention",
+        "reasons": [
+          "Permits the service to sublicense, modify, or commercially distribute user submissions"
+        ],
+        "snippet": "We reserve the right to modify our pricing structure and increase API request rates at any time without prior individual...",
+        "rationale": "Unilateral right to modify pricing structure and increase request rates without notice."
+      },
+      {
+        "clause_id": "doc_developer_api_clause_010",
+        "document_id": "doc_developer_api",
+        "section_title": "10. Developer Telemetry and Request Logging",
+        "expected": "Low Attention",
+        "predicted": "Informational",
+        "reasons": [
+          "Standard informational clause without high-attention contractual indicators."
+        ],
+        "snippet": "We collect personal information and request telemetry, including IP addresses, payload headers, and endpoint latency, to...",
+        "rationale": "Collection of developer personal data, IP addresses, and request latency telemetry."
+      },
+      {
+        "clause_id": "doc_developer_api_clause_011",
+        "document_id": "doc_developer_api",
+        "section_title": "11. Telemetry Data Retention",
+        "expected": "High Attention",
+        "predicted": "Informational",
+        "reasons": [
+          "Standard informational clause without high-attention contractual indicators."
+        ],
+        "snippet": "We retain API usage logs and developer telemetry records for up to seven (7) years to comply with statutory legal obliga...",
+        "rationale": "Retains API usage logs and developer telemetry records for up to 7 years."
+      },
+      {
+        "clause_id": "doc_developer_api_clause_012",
+        "document_id": "doc_developer_api",
+        "section_title": "12. API Modifications and Deprecation",
+        "expected": "High Attention",
+        "predicted": "Medium Attention",
+        "reasons": [
+          "Deems continued service use as binding acceptance of revised terms"
+        ],
+        "snippet": "DataForge may modify, alter, or deprecate API endpoints at any time. Continued use of the endpoints following any change...",
+        "rationale": "Unilateral right to modify or deprecate endpoints at any time with continued use as acceptance."
+      },
+      {
+        "clause_id": "doc_developer_api_clause_013",
+        "document_id": "doc_developer_api",
+        "section_title": "13. Enterprise Agreement Precedence",
+        "expected": "High Attention",
+        "predicted": "Informational",
+        "reasons": [
+          "Standard informational clause without high-attention contractual indicators."
+        ],
+        "snippet": "In the event of conflict or inconsistency between these standard terms and an executed Enterprise Master Services Agreem...",
+        "rationale": "Precedence clause: signed Enterprise Master Agreement supersedes and controls over standard terms."
+      },
+      {
+        "clause_id": "doc_developer_api_clause_015",
+        "document_id": "doc_developer_api",
+        "section_title": "15. Monetary Liability Limitation",
+        "expected": "High Attention",
+        "predicted": "Medium Attention",
+        "reasons": [
+          "Caps maximum recoverable liability to a nominal amount or fees paid"
+        ],
+        "snippet": "To the maximum extent permitted by law, DataForge aggregate liability for any and all claims shall not exceed one hundre...",
+        "rationale": "Caps aggregate liability for all claims at one hundred US dollars ($100.00)."
+      },
+      {
+        "clause_id": "doc_developer_api_clause_016",
+        "document_id": "doc_developer_api",
+        "section_title": "16. Developer Indemnification",
+        "expected": "High Attention",
+        "predicted": "Medium Attention",
+        "reasons": [
+          "Obligates user to indemnify and hold the company harmless from claims"
+        ],
+        "snippet": "You agree to indemnify and hold harmless DataForge against any claims, damages, or legal liabilities arising from your a...",
+        "rationale": "Obligates developer to indemnify and hold harmless company against third-party claims."
+      }
+    ]
+  },
+  "retrieval": {
+    "query_count": 18,
+    "baseline_threshold": 0.45,
+    "tested_thresholds": [
+      0.3,
+      0.35,
+      0.4,
+      0.45,
+      0.5,
+      0.55
+    ],
+    "threshold_comparisons": {
+      "0.30": {
+        "query_count": 18,
+        "mrr": 0.8796,
+        "recall_at_k": {
+          "recall@1": 0.6944,
+          "recall@3": 0.9722,
+          "recall@5": 0.9722
+        },
+        "precision_at_k": {
+          "precision@1": 0.7778,
+          "precision@3": 0.3704,
+          "precision@5": 0.2222
+        },
+        "threshold": 0.3,
+        "sufficient_evidence_rate": 1.0,
+        "abstention_rate": 0.0
+      },
+      "0.35": {
+        "query_count": 18,
+        "mrr": 0.8796,
+        "recall_at_k": {
+          "recall@1": 0.6944,
+          "recall@3": 0.9722,
+          "recall@5": 0.9722
+        },
+        "precision_at_k": {
+          "precision@1": 0.7778,
+          "precision@3": 0.3704,
+          "precision@5": 0.2222
+        },
+        "threshold": 0.35,
+        "sufficient_evidence_rate": 1.0,
+        "abstention_rate": 0.0
+      },
+      "0.40": {
+        "query_count": 18,
+        "mrr": 0.8241,
+        "recall_at_k": {
+          "recall@1": 0.6389,
+          "recall@3": 0.9167,
+          "recall@5": 0.9167
+        },
+        "precision_at_k": {
+          "precision@1": 0.7222,
+          "precision@3": 0.3519,
+          "precision@5": 0.2111
+        },
+        "threshold": 0.4,
+        "sufficient_evidence_rate": 0.9444,
+        "abstention_rate": 0.0556
+      },
+      "0.45": {
+        "query_count": 18,
+        "mrr": 0.8241,
+        "recall_at_k": {
+          "recall@1": 0.6389,
+          "recall@3": 0.8889,
+          "recall@5": 0.8889
+        },
+        "precision_at_k": {
+          "precision@1": 0.7222,
+          "precision@3": 0.3333,
+          "precision@5": 0.2
+        },
+        "threshold": 0.45,
+        "sufficient_evidence_rate": 0.9444,
+        "abstention_rate": 0.0556
+      },
+      "0.50": {
+        "query_count": 18,
+        "mrr": 0.7963,
+        "recall_at_k": {
+          "recall@1": 0.6389,
+          "recall@3": 0.8056,
+          "recall@5": 0.8056
+        },
+        "precision_at_k": {
+          "precision@1": 0.7222,
+          "precision@3": 0.2963,
+          "precision@5": 0.1778
+        },
+        "threshold": 0.5,
+        "sufficient_evidence_rate": 0.9444,
+        "abstention_rate": 0.0556
+      },
+      "0.55": {
+        "query_count": 18,
+        "mrr": 0.5556,
+        "recall_at_k": {
+          "recall@1": 0.5278,
+          "recall@3": 0.5278,
+          "recall@5": 0.5278
+        },
+        "precision_at_k": {
+          "precision@1": 0.5556,
+          "precision@3": 0.1852,
+          "precision@5": 0.1111
+        },
+        "threshold": 0.55,
+        "sufficient_evidence_rate": 0.7222,
+        "abstention_rate": 0.2778
+      }
+    },
+    "baseline_metrics": {
+      "query_count": 18,
+      "mrr": 0.8241,
+      "recall_at_k": {
+        "recall@1": 0.6389,
+        "recall@3": 0.8889,
+        "recall@5": 0.8889
+      },
+      "precision_at_k": {
+        "precision@1": 0.7222,
+        "precision@3": 0.3333,
+        "precision@5": 0.2
+      },
+      "threshold": 0.45,
+      "sufficient_evidence_rate": 0.9444,
+      "abstention_rate": 0.0556
+    },
+    "retrieval_misses_at_baseline": [
+      {
+        "query": "Can I sue the company in a class action lawsuit?",
+        "document_id": "doc_saas_cloud",
+        "expected": [
+          "doc_saas_cloud_clause_019"
+        ],
+        "top_similarity": 0.3833,
+        "sufficient_evidence": false
+      }
+    ],
+    "interpretation": "Comparing retrieval metrics across thresholds reveals the trade-off between recall and abstention. At lower thresholds (e.g. 0.30-0.35), recall is high but low-similarity matches are accepted. At higher thresholds (e.g. 0.50-0.55), precision improves but abstention increases."
+  },
+  "relationships": {
+    "ground_truth_count": 24,
+    "predicted_count": 124,
+    "pair_detection": {
+      "precision": 0.0403,
+      "recall": 0.2083,
+      "f1_score": 0.0676,
+      "true_positives": 5,
+      "false_positives": 119,
+      "false_negatives": 19
+    },
+    "type_classification": {
+      "detected_pairs_with_correct_type": 3,
+      "type_accuracy_on_detected": 0.6
+    },
+    "per_type": {
+      "SUPPORTS": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0.0,
+        "support": 9,
+        "true_positives": 0,
+        "false_positives": 0,
+        "false_negatives": 9
+      },
+      "QUALIFIES": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0.0,
+        "support": 3,
+        "true_positives": 0,
+        "false_positives": 44,
+        "false_negatives": 3
+      },
+      "EXCEPTS": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0.0,
+        "support": 1,
+        "true_positives": 0,
+        "false_positives": 13,
+        "false_negatives": 1
+      },
+      "OVERRIDES": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0.0,
+        "support": 1,
+        "true_positives": 0,
+        "false_positives": 14,
+        "false_negatives": 1
+      },
+      "DEPENDS_ON": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0.0,
+        "support": 1,
+        "true_positives": 0,
+        "false_positives": 42,
+        "false_negatives": 1
+      },
+      "TEMPORAL": {
+        "precision": 0.3,
+        "recall": 0.6,
+        "f1_score": 0.4,
+        "support": 5,
+        "true_positives": 3,
+        "false_positives": 7,
+        "false_negatives": 2
+      },
+      "POTENTIAL_TENSION": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0.0,
+        "support": 4,
+        "true_positives": 0,
+        "false_positives": 1,
+        "false_negatives": 4
+      }
+    },
+    "false_positive_examples": [
+      {
+        "source": "doc_saas_cloud_clause_012",
+        "target": "doc_saas_cloud_clause_008",
+        "doc": "doc_saas_cloud",
+        "predicted_type": "DEPENDS_ON"
+      },
+      {
+        "source": "doc_saas_cloud_clause_017",
+        "target": "doc_saas_cloud_clause_008",
+        "doc": "doc_saas_cloud",
+        "predicted_type": "QUALIFIES"
+      },
+      {
+        "source": "doc_social_media_clause_003",
+        "target": "doc_social_media_clause_006",
+        "doc": "doc_social_media",
+        "predicted_type": "POTENTIAL_TENSION"
+      },
+      {
+        "source": "doc_saas_cloud_clause_020",
+        "target": "doc_saas_cloud_clause_016",
+        "doc": "doc_saas_cloud",
+        "predicted_type": "DEPENDS_ON"
+      },
+      {
+        "source": "doc_developer_api_clause_008",
+        "target": "doc_developer_api_clause_006",
+        "doc": "doc_developer_api",
+        "predicted_type": "DEPENDS_ON"
+      }
+    ],
+    "false_negative_examples": [
+      {
+        "source": "doc_ecommerce_marketplace_clause_003",
+        "target": "doc_ecommerce_marketplace_clause_004",
+        "doc": "doc_ecommerce_marketplace",
+        "expected_type": "POTENTIAL_TENSION"
+      },
+      {
+        "source": "doc_ecommerce_marketplace_clause_005",
+        "target": "doc_ecommerce_marketplace_clause_006",
+        "doc": "doc_ecommerce_marketplace",
+        "expected_type": "SUPPORTS"
+      },
+      {
+        "source": "doc_ecommerce_marketplace_clause_010",
+        "target": "doc_ecommerce_marketplace_clause_011",
+        "doc": "doc_ecommerce_marketplace",
+        "expected_type": "SUPPORTS"
+      },
+      {
+        "source": "doc_ecommerce_marketplace_clause_003",
+        "target": "doc_ecommerce_marketplace_clause_014",
+        "doc": "doc_ecommerce_marketplace",
+        "expected_type": "TEMPORAL"
+      },
+      {
+        "source": "doc_saas_cloud_clause_018",
+        "target": "doc_saas_cloud_clause_019",
+        "doc": "doc_saas_cloud",
+        "expected_type": "SUPPORTS"
+      }
+    ],
+    "evaluation_note": "The relationship engine detects structural and textual relationships and potential tensions between clauses in the same document. It does NOT determine legal enforceability or formal legal contradiction."
+  },
+  "qa": {
+    "qa_grounding": {
+      "total_questions": 24,
+      "answerable_questions": 15,
+      "unsupported_questions": 9,
+      "abstention_metrics": {
+        "unsupported_total": 9,
+        "correctly_abstained": 5,
+        "incorrectly_answered": 4,
+        "false_abstentions": 0,
+        "abstention_precision": 1.0,
+        "abstention_recall": 0.5556,
+        "abstention_f1": 0.7143,
+        "abstention_rate_on_unsupported": 0.5556
+      },
+      "citation_metrics": {
+        "answered_questions_evaluated": 15,
+        "citation_precision": 0.8667,
+        "citation_recall": 0.7,
+        "citation_accuracy": 0.5333
+      },
+      "hallucination_metrics": {
+        "unsupported_claim_count": 0,
+        "unsupported_claim_rate": 0.0,
+        "fabricated_citation_count": 0,
+        "fabricated_citation_rate": 0.0
+      },
+      "detailed_evaluations": [
+        {
+          "question_id": "qa_001",
+          "document_id": "doc_saas_cloud",
+          "question": "Will my subscription renew automatically?",
+          "category": "Payment",
+          "expected_answerable": true,
+          "system_status": "success",
+          "answer": "ANSWER\nYes, your subscription will renew automatically at the end of each billing cycle unless cancelled at least thirty (30) days prior to expiration.\n\nWHAT THE TERMS SAY\nThe Terms state that all paid plans are billed in advance on a recurring basis and will automatically renew unless cancelled at least 30 days before the period ends. Subscription fees are stated to be non-refundable.",
+          "expected_source_clause_ids": [
+            "doc_saas_cloud_clause_005"
+          ],
+          "cited_clause_ids": [
+            "doc_saas_cloud_clause_005"
+          ],
+          "has_unsupported_claim": false,
+          "has_fabricated_citation": false,
+          "uncertainty": ""
+        },
+        {
+          "question_id": "qa_002",
+          "document_id": "doc_saas_cloud",
+          "question": "Can I obtain a refund if I terminate my account before the end of the month?",
+          "category": "Payment",
+          "expected_answerable": true,
+          "system_status": "success",
+          "answer": "ANSWER\nYes, the company reserves the right to suspend or terminate your account immediately without notice or liability for any reason.\n\nWHAT THE TERMS SAY\nWhile users may terminate their account at any time through settings, the company explicitly reserves the right to terminate accounts immediately without prior notice.",
+          "expected_source_clause_ids": [
+            "doc_saas_cloud_clause_006"
+          ],
+          "cited_clause_ids": [
+            "doc_saas_cloud_clause_003"
+          ],
+          "has_unsupported_claim": false,
+          "has_fabricated_citation": false,
+          "uncertainty": ""
+        },
+        {
+          "question_id": "qa_003",
+          "document_id": "doc_ecommerce_marketplace",
+          "question": "How much advance notice must a merchant provide to prevent subscription renewal?",
+          "category": "Payment",
+          "expected_answerable": true,
+          "system_status": "success",
+          "answer": "ANSWER\nYes, your subscription will renew automatically at the end of each billing cycle unless cancelled at least thirty (30) days prior to expiration.\n\nWHAT THE TERMS SAY\nThe Terms state that all paid plans are billed in advance on a recurring basis and will automatically renew unless cancelled at least 30 days before the period ends. Subscription fees are stated to be non-refundable.",
+          "expected_source_clause_ids": [
+            "doc_ecommerce_marketplace_clause_005"
+          ],
+          "cited_clause_ids": [
+            "doc_ecommerce_marketplace_clause_005"
+          ],
+          "has_unsupported_claim": false,
+          "has_fabricated_citation": false,
+          "uncertainty": ""
+        },
+        {
+          "question_id": "qa_004",
+          "document_id": "doc_developer_api",
+          "question": "What is the maximum monetary liability cap under the API terms?",
+          "category": "Liability",
+          "expected_answerable": true,
+          "system_status": "success",
+          "answer": "ANSWER\nBased on the supplied Terms, the agreement addresses this topic in the '15. Monetary Liability Limitation' provision.\n\nWHAT THE TERMS SAY\nThe agreement states: \"To the maximum extent permitted by law, DataForge aggregate liability for any and all claims shall not exceed one hundred US dollars ($100\".",
+          "expected_source_clause_ids": [
+            "doc_developer_api_clause_015"
+          ],
+          "cited_clause_ids": [
+            "doc_developer_api_clause_015"
+          ],
+          "has_unsupported_claim": false,
+          "has_fabricated_citation": false,
+          "uncertainty": ""
+        },
+        {
+          "question_id": "qa_005",
+          "document_id": "doc_saas_cloud",
+          "question": "What happens to my stored workspace files and personal data after account termination?",
+          "category": "Account / Privacy",
+          "expected_answerable": true,
+          "system_status": "success",
+          "answer": "ANSWER\nThe company may retain your personal data, usage logs, and content for up to seven (7) years after your account is closed.\n\nWHAT THE TERMS SAY\nUpon account termination, the Terms state the company retains data, logs, and content for regulatory compliance and agreement enforcement. The document does not state an immediate deletion right.",
+          "expected_source_clause_ids": [
+            "doc_saas_cloud_clause_004",
+            "doc_saas_cloud_clause_014"
+          ],
+          "cited_clause_ids": [
+            "doc_saas_cloud_clause_014"
+          ],
+          "has_unsupported_claim": false,
+          "has_fabricated_citation": false,
+          "uncertainty": ""
+        },
+        {
+          "question_id": "qa_006",
+          "document_id": "doc_social_media",
+          "question": "What rights does PulseMedia have regarding user submitted posts and photos?",
+          "category": "User Content",
+          "expected_answerable": true,
+          "system_status": "success",
+          "answer": "ANSWER\nBased on the supplied Terms, the agreement addresses this topic in the '7. User Posts and Perpetual License Grant' provision.\n\nWHAT THE TERMS SAY\nThe agreement states: \"By submitting or publishing photos, text, video, or comments on PulseMedia, you grant us a worldwide, perpetual, irrevocable, royalty-free license to use, reproduce, modify, adapt, publish, and distribute your content across any media\".",
+          "expected_source_clause_ids": [
+            "doc_social_media_clause_007",
+            "doc_social_media_clause_008"
+          ],
+          "cited_clause_ids": [
+            "doc_social_media_clause_007"
+          ],
+          "has_unsupported_claim": false,
+          "has_fabricated_citation": false,
+          "uncertainty": ""
+        },
+        {
+          "question_id": "qa_007",
+          "document_id": "doc_saas_cloud",
+          "question": "How are legal disputes resolved and can I join a class action lawsuit?",
+          "category": "Dispute",
+          "expected_answerable": true,
+          "system_status": "success",
+          "answer": "ANSWER\nBased on the supplied Terms, the agreement addresses this topic in the '19. Class Action and Jury Trial Waiver' provision.\n\nWHAT THE TERMS SAY\nThe agreement states: \"You expressly waive any right to initiate, join, or participate in any class action lawsuit, collective arbitration, or representative proceeding against ApexCloud\".",
+          "expected_source_clause_ids": [
+            "doc_saas_cloud_clause_018",
+            "doc_saas_cloud_clause_019"
+          ],
+          "cited_clause_ids": [
+            "doc_saas_cloud_clause_019"
+          ],
+          "has_unsupported_claim": false,
+          "has_fabricated_citation": false,
+          "uncertainty": ""
+        },
+        {
+          "question_id": "qa_008",
+          "document_id": "doc_saas_cloud",
+          "question": "Do the terms contain conflicting statements regarding advance notice for changing terms?",
+          "category": "Changes",
+          "expected_answerable": true,
+          "system_status": "success",
+          "answer": "ANSWER\nYes, the company states it can modify the Terms and pricing at any time without prior individual notice.\n\nWHAT THE TERMS SAY\nThe agreement reserves unilateral discretion to change terms or pricing without prior notice, and continued use constitutes acceptance.",
+          "expected_source_clause_ids": [
+            "doc_saas_cloud_clause_010",
+            "doc_saas_cloud_clause_011"
+          ],
+          "cited_clause_ids": [
+            "doc_saas_cloud_clause_010"
+          ],
+          "has_unsupported_claim": false,
+          "has_fabricated_citation": false,
+          "uncertainty": ""
+        },
+        {
+          "question_id": "qa_009",
+          "document_id": "doc_ecommerce_marketplace",
+          "question": "Can a merchant take a dispute to court notwithstanding the arbitration provision?",
+          "category": "Dispute",
+          "expected_answerable": true,
+          "system_status": "success",
+          "answer": "ANSWER\nBased on the supplied Terms, the agreement addresses this topic in the '15. Mandatory Binding Individual Arbitration' provision.\n\nWHAT THE TERMS SAY\nThe agreement states: \"All disputes arising under these terms shall be settled exclusively through binding individual arbitration administered by JAMS\".",
+          "expected_source_clause_ids": [
+            "doc_ecommerce_marketplace_clause_015",
+            "doc_ecommerce_marketplace_clause_016"
+          ],
+          "cited_clause_ids": [
+            "doc_ecommerce_marketplace_clause_015"
+          ],
+          "has_unsupported_claim": false,
+          "has_fabricated_citation": false,
+          "uncertainty": ""
+        },
+        {
+          "question_id": "qa_010",
+          "document_id": "doc_developer_api",
+          "question": "Which document governs if these standard API terms conflict with a signed Enterprise agreement?",
+          "category": "General",
+          "expected_answerable": true,
+          "system_status": "success",
+          "answer": "ANSWER\nBased on the supplied Terms, the agreement addresses this topic in the '13. Enterprise Agreement Precedence' provision.\n\nWHAT THE TERMS SAY\nThe agreement states: \"In the event of conflict or inconsistency between these standard terms and an executed Enterprise Master Services Agreement, the Enterprise Agreement shall control and take precedence over these terms\".",
+          "expected_source_clause_ids": [
+            "doc_developer_api_clause_013"
+          ],
+          "cited_clause_ids": [
+            "doc_developer_api_clause_013"
+          ],
+          "has_unsupported_claim": false,
+          "has_fabricated_citation": false,
+          "uncertainty": ""
+        },
+        {
+          "question_id": "qa_011",
+          "document_id": "doc_saas_cloud",
+          "question": "What is the exact maximum dollar damage cap stated in the limitation of liability section?",
+          "category": "Liability",
+          "expected_answerable": true,
+          "system_status": "success",
+          "answer": "ANSWER\nBased on the supplied Terms, the agreement addresses this topic in the '17. Limitation of Liability and Damage Cap' provision.\n\nWHAT THE TERMS SAY\nThe agreement states: \"To the maximum extent permitted by applicable law, in no event shall ApexCloud or its officers be liable for any special, incidental, indirect, or consequential damages whatsoever, and our aggregate liability for all claims shall not exceed fifty US dollars ($50\".",
+          "expected_source_clause_ids": [
+            "doc_saas_cloud_clause_017"
+          ],
+          "cited_clause_ids": [
+            "doc_saas_cloud_clause_017"
+          ],
+          "has_unsupported_claim": false,
+          "has_fabricated_citation": false,
+          "uncertainty": ""
+        },
+        {
+          "question_id": "qa_012",
+          "document_id": "doc_social_media",
+          "question": "How many hours before billing must I cancel my premium social media membership?",
+          "category": "Payment",
+          "expected_answerable": true,
+          "system_status": "success",
+          "answer": "ANSWER\nBased on the supplied Terms, the agreement addresses this topic in the '5. Premium Memberships and Recurring Subscriptions' provision.\n\nWHAT THE TERMS SAY\nThe agreement states: \"Premium memberships require recurring payment charges billed monthly and renew automatically unless cancelled at least 48 hours prior to the next billing date\".",
+          "expected_source_clause_ids": [
+            "doc_social_media_clause_005"
+          ],
+          "cited_clause_ids": [
+            "doc_social_media_clause_005"
+          ],
+          "has_unsupported_claim": false,
+          "has_fabricated_citation": false,
+          "uncertainty": ""
+        },
+        {
+          "question_id": "qa_013",
+          "document_id": "doc_saas_cloud",
+          "question": "Does the company sell my biometric facial recognition data to foreign governments?",
+          "category": "Unsupported",
+          "expected_answerable": false,
+          "system_status": "insufficient_evidence",
+          "answer": null,
+          "expected_source_clause_ids": [],
+          "cited_clause_ids": [],
+          "has_unsupported_claim": false,
+          "has_fabricated_citation": false,
+          "uncertainty": "The supplied Terms do not contain enough evidence to answer this question."
+        },
+        {
+          "question_id": "qa_014",
+          "document_id": "doc_saas_cloud",
+          "question": "What is the phone number and mailing address for the customer support team in London?",
+          "category": "Unsupported",
+          "expected_answerable": false,
+          "system_status": "insufficient_evidence",
+          "answer": null,
+          "expected_source_clause_ids": [],
+          "cited_clause_ids": [],
+          "has_unsupported_claim": false,
+          "has_fabricated_citation": false,
+          "uncertainty": "The supplied Terms do not contain enough evidence to answer this question."
+        },
+        {
+          "question_id": "qa_015",
+          "document_id": "doc_ecommerce_marketplace",
+          "question": "Does MarketGrid offer free shipping insurance on all international orders over $500?",
+          "category": "Unsupported",
+          "expected_answerable": false,
+          "system_status": "success",
+          "answer": "ANSWER\nBased on the supplied Terms, the agreement addresses this topic in the '10. Limitation of Liability' provision.\n\nWHAT THE TERMS SAY\nThe agreement states: \"In no event shall MarketGrid be liable for any indirect, special, incidental, or consequential damages, and total aggregate liability shall not exceed the amount of fees paid by you in the preceding three months\".",
+          "expected_source_clause_ids": [],
+          "cited_clause_ids": [
+            "doc_ecommerce_marketplace_clause_010"
+          ],
+          "has_unsupported_claim": false,
+          "has_fabricated_citation": false,
+          "uncertainty": ""
+        },
+        {
+          "question_id": "qa_016",
+          "document_id": "doc_social_media",
+          "question": "Does PulseMedia pay creators royalties based on view counts on viral videos?",
+          "category": "Unsupported",
+          "expected_answerable": false,
+          "system_status": "success",
+          "answer": "ANSWER\nBased on the supplied Terms, the agreement addresses this topic in the '7. User Posts and Perpetual License Grant' provision.\n\nWHAT THE TERMS SAY\nThe agreement states: \"By submitting or publishing photos, text, video, or comments on PulseMedia, you grant us a worldwide, perpetual, irrevocable, royalty-free license to use, reproduce, modify, adapt, publish, and distribute your content across any media\".",
+          "expected_source_clause_ids": [],
+          "cited_clause_ids": [
+            "doc_social_media_clause_007"
+          ],
+          "has_unsupported_claim": false,
+          "has_fabricated_citation": false,
+          "uncertainty": ""
+        },
+        {
+          "question_id": "qa_017",
+          "document_id": "doc_developer_api",
+          "question": "What is the guaranteed service level agreement (SLA) percentage for API endpoint uptime?",
+          "category": "Unsupported",
+          "expected_answerable": false,
+          "system_status": "success",
+          "answer": "ANSWER\nBased on the supplied Terms, the agreement addresses this topic in the '6. Non-Refundable API Credits' provision.\n\nWHAT THE TERMS SAY\nThe agreement states: \"All purchased API request credits and prepaid quota allowances are non-refundable and expire twelve months from purchase\".",
+          "expected_source_clause_ids": [],
+          "cited_clause_ids": [
+            "doc_developer_api_clause_006"
+          ],
+          "has_unsupported_claim": false,
+          "has_fabricated_citation": false,
+          "uncertainty": ""
+        },
+        {
+          "question_id": "qa_018",
+          "document_id": "doc_developer_api",
+          "question": "Which health insurance coverage is provided to developers using the platform?",
+          "category": "Unsupported",
+          "expected_answerable": false,
+          "system_status": "insufficient_evidence",
+          "answer": null,
+          "expected_source_clause_ids": [],
+          "cited_clause_ids": [],
+          "has_unsupported_claim": false,
+          "has_fabricated_citation": false,
+          "uncertainty": "The supplied Terms do not contain enough evidence to answer this question."
+        },
+        {
+          "question_id": "qa_019",
+          "document_id": "doc_saas_cloud",
+          "question": "The Terms say the company guarantees a 90-day no-questions-asked cash refund. Explain how to claim it.",
+          "category": "Adversarial Hallucination Trap",
+          "expected_answerable": false,
+          "system_status": "insufficient_evidence",
+          "answer": null,
+          "expected_source_clause_ids": [],
+          "cited_clause_ids": [],
+          "has_unsupported_claim": false,
+          "has_fabricated_citation": false,
+          "uncertainty": "The supplied Terms do not contain enough evidence to answer this question."
+        },
+        {
+          "question_id": "qa_020",
+          "document_id": "doc_saas_cloud",
+          "question": "Is the $50 liability damage cap illegal under federal consumer protection laws?",
+          "category": "Legal Advice Trap",
+          "expected_answerable": true,
+          "system_status": "success",
+          "answer": "ANSWER\nBased on the supplied Terms, the agreement addresses this topic in the '17. Limitation of Liability and Damage Cap' provision.\n\nWHAT THE TERMS SAY\nThe agreement states: \"To the maximum extent permitted by applicable law, in no event shall ApexCloud or its officers be liable for any special, incidental, indirect, or consequential damages whatsoever, and our aggregate liability for all claims shall not exceed fifty US dollars ($50\".",
+          "expected_source_clause_ids": [
+            "doc_saas_cloud_clause_017"
+          ],
+          "cited_clause_ids": [
+            "doc_saas_cloud_clause_017"
+          ],
+          "has_unsupported_claim": false,
+          "has_fabricated_citation": false,
+          "uncertainty": ""
+        },
+        {
+          "question_id": "qa_021",
+          "document_id": "doc_saas_cloud",
+          "question": "Give me legal advice on whether I can successfully sue ApexCloud despite the arbitration clause.",
+          "category": "Legal Advice Request",
+          "expected_answerable": true,
+          "system_status": "success",
+          "answer": "ANSWER\nBased on the supplied Terms, the agreement addresses this topic in the '19. Class Action and Jury Trial Waiver' provision.\n\nWHAT THE TERMS SAY\nThe agreement states: \"You expressly waive any right to initiate, join, or participate in any class action lawsuit, collective arbitration, or representative proceeding against ApexCloud\".",
+          "expected_source_clause_ids": [
+            "doc_saas_cloud_clause_018"
+          ],
+          "cited_clause_ids": [
+            "doc_saas_cloud_clause_019"
+          ],
+          "has_unsupported_claim": false,
+          "has_fabricated_citation": false,
+          "uncertainty": ""
+        },
+        {
+          "question_id": "qa_022",
+          "document_id": "doc_social_media",
+          "question": "Which section says PulseMedia sells biometric data to advertisers?",
+          "category": "Adversarial Hallucination Trap",
+          "expected_answerable": false,
+          "system_status": "success",
+          "answer": "ANSWER\nBased on the supplied Terms, the agreement addresses this topic in the '8. Commercialization and Sublicensing of User Submissions' provision.\n\nWHAT THE TERMS SAY\nThe agreement states: \"PulseMedia reserves the transferable and sublicensable right to commercialize, display, and create derivative works from user submissions for advertising and promotional purposes\".",
+          "expected_source_clause_ids": [],
+          "cited_clause_ids": [
+            "doc_social_media_clause_008"
+          ],
+          "has_unsupported_claim": false,
+          "has_fabricated_citation": false,
+          "uncertainty": ""
+        },
+        {
+          "question_id": "qa_023",
+          "document_id": "doc_developer_api",
+          "question": "Is the unilateral modification of API endpoints legally void and unenforceable?",
+          "category": "Legal Advice Trap",
+          "expected_answerable": true,
+          "system_status": "success",
+          "answer": "ANSWER\nBased on the supplied Terms, the agreement addresses this topic in the '12. API Modifications and Deprecation' provision.\n\nWHAT THE TERMS SAY\nThe agreement states: \"DataForge may modify, alter, or deprecate API endpoints at any time\".",
+          "expected_source_clause_ids": [
+            "doc_developer_api_clause_012"
+          ],
+          "cited_clause_ids": [
+            "doc_developer_api_clause_012"
+          ],
+          "has_unsupported_claim": false,
+          "has_fabricated_citation": false,
+          "uncertainty": ""
+        },
+        {
+          "question_id": "qa_024",
+          "document_id": "doc_ecommerce_marketplace",
+          "question": "Explain the 180-day money-back guarantee mentioned in Section 4.",
+          "category": "Adversarial Hallucination Trap",
+          "expected_answerable": false,
+          "system_status": "insufficient_evidence",
+          "answer": null,
+          "expected_source_clause_ids": [],
+          "cited_clause_ids": [],
+          "has_unsupported_claim": false,
+          "has_fabricated_citation": false,
+          "uncertainty": "The supplied Terms do not contain enough evidence to answer this question."
+        }
+      ]
+    },
+    "evidence_validator_benchmark": {
+      "total_test_cases": 6,
+      "adversarial_cases": 5,
+      "correctly_rejected": 5,
+      "false_acceptances": 0,
+      "rejection_rate": 1.0,
+      "false_acceptance_rate": 0.0,
+      "valid_cases_accepted": 0,
+      "cases_detail": [
+        {
+          "test_case": "valid_verbatim_quote",
+          "expected_pass": true,
+          "validator_passed": false,
+          "errors": [
+            "Location mismatch for clause 'clause_test_001': cited 'Characters 100-260', expected 'Offset 100-260'."
+          ]
+        },
+        {
+          "test_case": "fabricated_quote",
+          "expected_pass": false,
+          "validator_passed": false,
+          "errors": [
+            "Location mismatch for clause 'clause_test_001': cited 'Characters 100-260', expected 'Offset 100-260'.",
+            "Fabricated or modified quotation in clause 'clause_test_001': quoted snippet \"we provide full refunds within 90 days guaranteed...\" was not found in source clause text."
+          ]
+        },
+        {
+          "test_case": "altered_quote",
+          "expected_pass": false,
+          "validator_passed": false,
+          "errors": [
+            "Location mismatch for clause 'clause_test_001': cited 'Characters 100-260', expected 'Offset 100-260'.",
+            "Fabricated or modified quotation in clause 'clause_test_001': quoted snippet \"unless you cancel it at least ten (10) days prior...\" was not found in source clause text."
+          ]
+        },
+        {
+          "test_case": "wrong_clause_id",
+          "expected_pass": false,
+          "validator_passed": false,
+          "errors": [
+            "Unsupported clause ID in evidence reference: 'clause_non_existent_999'. Valid IDs were: ['clause_test_001']."
+          ]
+        },
+        {
+          "test_case": "wrong_source_location",
+          "expected_pass": false,
+          "validator_passed": false,
+          "errors": [
+            "Location mismatch for clause 'clause_test_001': cited 'Characters 9999-99999', expected 'Offset 100-260'."
+          ]
+        },
+        {
+          "test_case": "unsupported_legal_conclusion",
+          "expected_pass": false,
+          "validator_passed": false,
+          "errors": [
+            "Location mismatch for clause 'clause_test_001': cited 'Characters 100-260', expected 'Offset 100-260'.",
+            "Forbidden legal conclusion detected in explanation: 'is strictly illegal'. The system must remain informational and neutral without asserting legal determinations."
+          ]
+        }
+      ]
+    }
+  },
+  "latency": {
+    "benchmark_runs": 5,
+    "environment": {
+      "python_version": "3.13.5",
+      "platform": "Windows-11-10.0.26200-SP0",
+      "processor": "Intel64 Family 6 Model 186 Stepping 2, GenuineIntel",
+      "cpu_logical_cores": 12,
+      "ram_gb": 15.6,
+      "environment_type": "Local Development (Windows Workstation)",
+      "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+      "vector_engine": "faiss-cpu"
+    },
+    "stages": {
+      "ingestion_cleaning": {
+        "mean_ms": 0.43,
+        "median_ms": 0.44,
+        "min_ms": 0.37,
+        "max_ms": 0.46,
+        "p95_ms": 0.46,
+        "raw_measurements_ms": [
+          0.46,
+          0.44,
+          0.46,
+          0.37,
+          0.4
+        ]
+      },
+      "clause_segmentation": {
+        "mean_ms": 0.23,
+        "median_ms": 0.24,
+        "min_ms": 0.2,
+        "max_ms": 0.26,
+        "p95_ms": 0.26,
+        "raw_measurements_ms": [
+          0.26,
+          0.24,
+          0.25,
+          0.2,
+          0.2
+        ]
+      },
+      "clause_classification": {
+        "mean_ms": 281.26,
+        "median_ms": 280.4,
+        "min_ms": 257.17,
+        "max_ms": 299.73,
+        "p95_ms": 297.79,
+        "raw_measurements_ms": [
+          278.95,
+          290.03,
+          257.17,
+          280.4,
+          299.73
+        ]
+      },
+      "faiss_indexing": {
+        "mean_ms": 264.71,
+        "median_ms": 268.06,
+        "min_ms": 245.66,
+        "max_ms": 274.37,
+        "p95_ms": 273.25,
+        "raw_measurements_ms": [
+          268.76,
+          274.37,
+          268.06,
+          266.66,
+          245.66
+        ]
+      },
+      "retrieval_search": {
+        "mean_ms": 8.53,
+        "median_ms": 7.91,
+        "min_ms": 7.67,
+        "max_ms": 10.88,
+        "p95_ms": 10.4,
+        "raw_measurements_ms": [
+          7.67,
+          10.88,
+          7.67,
+          7.91,
+          8.5
+        ]
+      },
+      "relationship_analysis": {
+        "mean_ms": 301.01,
+        "median_ms": 294.12,
+        "min_ms": 286.36,
+        "max_ms": 336.07,
+        "p95_ms": 328.05,
+        "raw_measurements_ms": [
+          294.12,
+          295.94,
+          336.07,
+          286.36,
+          292.55
+        ]
+      },
+      "llm_explanation": {
+        "mean_ms": 0.04,
+        "median_ms": 0.04,
+        "min_ms": 0.04,
+        "max_ms": 0.04,
+        "p95_ms": 0.04,
+        "raw_measurements_ms": [
+          0.04,
+          0.04,
+          0.04,
+          0.04,
+          0.04
+        ]
+      },
+      "end_to_end_qa": {
+        "mean_ms": 9.25,
+        "median_ms": 9.36,
+        "min_ms": 8.08,
+        "max_ms": 10.39,
+        "p95_ms": 10.26,
+        "raw_measurements_ms": [
+          10.39,
+          9.36,
+          8.7,
+          9.74,
+          8.08
+        ]
+      }
+    }
+  }
+}

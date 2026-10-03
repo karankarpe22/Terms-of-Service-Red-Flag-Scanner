@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ToS Red-Flag Scanner &bull; AI Terms of Service Analyzer</title>
+  <meta name="description" content="Instantly analyze complex Terms of Service agreements to uncover hidden risks, unilateral rights, liability traps, and unfair clauses in plain English.">
+  <link rel="stylesheet" href="styles.css?v=4">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Global Notification / Alert Banner -->
+  <div id="globalAlert" class="global-alert hidden" role="alert">
+    <div class="alert-content">
+      <span class="alert-icon">⚠️</span>
+      <div class="alert-text">
+        <strong id="alertTitle">Notice</strong>: <span id="alertMessage">Message</span>
+      </div>
+    </div>
+    <button id="btnDismissAlert" class="btn-icon" aria-label="Dismiss alert">&times;</button>
+  </div>
+
+  <!-- Header Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="brand-logo">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="m9 12 2 2 4-4"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1 class="brand-title">ToS Red-Flag Scanner</h1>
+          <p class="brand-subtitle">Smart Plain-English Consumer Contract Auditor</p>
+        </div>
+      </div>
+
+      <div class="header-meta">
+        <span class="legal-badge">
+          <span class="badge-dot"></span>
+          Informational Analysis &bull; Not Legal Advice
+        </span>
+        <button id="btnNewScan" class="btn btn-secondary btn-sm" aria-label="Start a new document scan">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+            <path d="M21 3v5h-5"/>
+            <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+            <path d="M3 21v-5h5"/>
+          </svg>
+          New Scan
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-container">
+
+    <!-- ========================================================================= -->
+    <!-- SECTION 1: DOCUMENT INPUT & TARGETED CONCERNS                             -->
+    <!-- ========================================================================= -->
+    <section id="inputSection" class="card input-card">
+      <div class="section-intro">
+        <div class="intro-badge">Simple 1-Step Audit</div>
+        <h2 class="section-title">Scan Terms of Service in Seconds</h2>
+        <p class="section-description">
+          Upload any contract PDF or paste legal text. We translate confusing legalese into clear, plain-English risks, highlight hidden traps, and map connected cross-clause loopholes.
+        </p>
+      </div>
+
+      <!-- Input Tabs -->
+      <div class="tabs-nav" role="tablist">
+        <button id="tabPdf" class="tab-btn active" role="tab" aria-selected="true" aria-controls="pdfPanel">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+          Upload PDF Contract
+        </button>
+        <button id="tabText" class="tab-btn" role="tab" aria-selected="false" aria-controls="textPanel">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="17" y1="10" x2="3" y2="10"/>
+            <line x1="21" y1="6" x2="3" y2="6"/>
+            <line x1="21" y1="14" x2="3" y2="14"/>
+            <line x1="17" y1="18" x2="3" y2="18"/>
+          </svg>
+          Paste Raw Text
+        </button>
+      </div>
+
+      <!-- Tab 1: PDF Upload Panel -->
+      <div id="pdfPanel" class="tab-panel" role="tabpanel" aria-labelledby="tabPdf">
+        <div id="dropZone" class="drop-zone" tabindex="0" role="button" aria-label="Drop PDF here or click to browse">
+          <input type="file" id="pdfFileInput" accept="application/pdf" class="file-input-hidden" aria-label="Upload PDF file">
+          <div class="drop-zone-content">
+            <div class="drop-zone-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+            </div>
+            <h3 class="drop-zone-title">Drag &amp; drop contract PDF here</h3>
+            <p class="drop-zone-subtitle">or <span class="browse-link">browse from your computer</span></p>
+            <span class="file-limits">Supports native &amp; scanned PDF documents up to 50MB</span>
+          </div>
+        </div>
+
+        <!-- Selected File Preview Card -->
+        <div id="selectedFileCard" class="selected-file-card hidden">
+          <div class="file-info-group">
+            <span class="file-icon">📄</span>
+            <div class="file-details">
+              <div id="selectedFileName" class="file-name">document.pdf</div>
+              <div id="selectedFileSize" class="file-size">0 KB</div>
+            </div>
+          </div>
+          <button id="btnRemoveFile" class="btn-icon text-danger" title="Remove attached file" aria-label="Remove attached file">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tab 2: Raw Text Panel -->
+      <div id="textPanel" class="tab-panel hidden" role="tabpanel" aria-labelledby="tabText">
+        <div class="form-group">
+          <label for="docTitleInput" class="form-label">Contract / Service Title (Optional)</label>
+          <input type="text" id="docTitleInput" class="form-control" placeholder="e.g. PhonePe Terms of Service, Spotify Privacy Policy">
+        </div>
+
+        <div class="form-group">
+          <div class="label-row">
+            <label for="tosTextInput" class="form-label">Terms of Service Content</label>
+            <div class="text-actions">
+              <button id="btnLoadSample" type="button" class="btn-link">⚡ Load Sample ToS</button>
+              <button id="btnClearText" type="button" class="btn-link text-muted">Clear</button>
+            </div>
+          </div>
+          <textarea id="tosTextInput" class="form-control text-area" rows="9" placeholder="Paste full Terms of Service or Privacy Policy text here..."></textarea>
+          <div class="textarea-footer">
+            <span id="charCount" class="char-counter">0 characters</span>
+            <span class="text-tip">Minimum 50 characters required</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Targeted Concerns Selection -->
+      <div class="concerns-container">
+        <div class="concerns-header">
+          <label class="form-label mb-0">Prioritize Your Personal Concerns (Optional Focus Areas):</label>
+          <span class="concerns-hint">Flags matching your interests will be highlighted first</span>
+        </div>
+        <div class="concerns-grid">
+          <label class="concern-chip">
+            <input type="checkbox" name="concerns" value="Privacy & Data">
+            <span class="chip-content">🔒 Privacy & Data</span>
+          </label>
+          <label class="concern-chip">
+            <input type="checkbox" name="concerns" value="Payment">
+            <span class="chip-content">💳 Payment</span>
+          </label>
+          <label class="concern-chip">
+            <input type="checkbox" name="concerns" value="Account">
+            <span class="chip-content">👤 Account</span>
+          </label>
+          <label class="concern-chip">
+            <input type="checkbox" name="concerns" value="Dispute">
+            <span class="chip-content">⚖️ Dispute</span>
+          </label>
+          <label class="concern-chip">
+            <input type="checkbox" name="concerns" value="Liability">
+            <span class="chip-content">🛡️ Liability</span>
+          </label>
+          <label class="concern-chip">
+            <input type="checkbox" name="concerns" value="User Content">
+            <span class="chip-content">📝 User Content</span>
+          </label>
+          <label class="concern-chip">
+            <input type="checkbox" name="concerns" value="Changes">
+            <span class="chip-content">🔄 Changes</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Scan Action Button -->
+      <div class="scan-action-wrap">
+        <button id="btnAnalyze" class="btn btn-primary btn-lg" disabled>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          Scan &amp; Uncover Red Flags
+        </button>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- SECTION 2: LIVE AUDIT PIPELINE PROGRESS                                   -->
+    <!-- ========================================================================= -->
+    <section id="progressSection" class="card progress-card hidden" aria-live="polite">
+      <div class="progress-header">
+        <div class="spinner"></div>
+        <div>
+          <h3 class="progress-title">Analyzing Contract &amp; Detecting Hidden Traps</h3>
+          <p class="progress-subtitle">Extracting provisions, running deterministic rule checks, and building relationship graphs...</p>
+        </div>
+      </div>
+
+      <div class="progress-stepper">
+        <div id="step1" class="step-item active">
+          <div class="step-circle">1</div>
+          <div class="step-label">Parsing &amp; Normalization</div>
+        </div>
+        <div id="step2" class="step-item">
+          <div class="step-circle">2</div>
+          <div class="step-label">Clause Classification</div>
+        </div>
+        <div id="step3" class="step-item">
+          <div class="step-circle">3</div>
+          <div class="step-label">Cross-Clause Analysis</div>
+        </div>
+        <div id="step4" class="step-item">
+          <div class="step-circle">4</div>
+          <div class="step-label">Plain-English Synthesis</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- SECTION 3: SCAN RESULTS & EXECUTIVE DASHBOARD                             -->
+    <!-- ========================================================================= -->
+    <section id="resultsSection" class="results-section hidden">
+
+      <!-- Executive Overview Card -->
+      <div class="card executive-card">
+        <div class="executive-top">
+          <div class="doc-badge-group">
+            <span id="resSourceType" class="tag-pill">Document</span>
+            <span id="resDocId" class="tag-pill tag-muted">doc_id</span>
+          </div>
+          <div class="executive-actions">
+            <button id="btnReanalyze" class="btn btn-secondary btn-sm" title="Re-run analysis">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                <path d="M3 3v5h5"/>
+                <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
+                <path d="M21 21v-5h-5"/>
+              </svg>
+              Refresh Analysis
+            </button>
+          </div>
+        </div>
+
+        <h2 id="resDocTitle" class="doc-main-title">Terms of Service Analysis</h2>
+
+        <!-- Executive Plain-English Summary -->
+        <div class="executive-summary-block">
+          <div class="summary-label">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <circle cx="12" cy="13" r="3"/>
+            </svg>
+            Executive Plain-English Briefing
+          </div>
+          <p id="synthesisSummary" class="executive-summary-text">
+            Analyzing key provisions and risk exposures...
+          </p>
+          <div id="synthesisKeyPoints" class="executive-key-points"></div>
+          <div id="synthesisDegradedNotice" class="degraded-notice hidden">
+            ⚠️ Gemini AI synthesis is temporarily degraded; deterministic risk rules and raw evidence remain 100% active.
+          </div>
+        </div>
+
+        <!-- Metric Badges / Quick Attention Filters -->
+        <div class="metrics-row">
+          <div id="cardMetricHigh" class="metric-card metric-high" role="button" tabindex="0" title="Click to filter High Attention clauses">
+            <div class="metric-header">
+              <span class="metric-indicator-dot"></span>
+              <span class="metric-label">High Attention</span>
+            </div>
+            <div id="countHigh" class="metric-value">0</div>
+            <div class="metric-desc">Critical traps &amp; waivers</div>
+          </div>
+
+          <div id="cardMetricMedium" class="metric-card metric-medium" role="button" tabindex="0" title="Click to filter Medium Attention clauses">
+            <div class="metric-header">
+              <span class="metric-indicator-dot"></span>
+              <span class="metric-label">Medium Attention</span>
+            </div>
+            <div id="countMedium" class="metric-value">0</div>
+            <div class="metric-desc">Notable unilateral terms</div>
+          </div>
+
+          <div id="cardMetricLow" class="metric-card metric-low" role="button" tabindex="0" title="Click to filter Low Attention clauses">
+            <div class="metric-header">
+              <span class="metric-indicator-dot"></span>
+              <span class="metric-label">Low Attention</span>
+            </div>
+            <div id="countLow" class="metric-value">0</div>
+            <div class="metric-desc">Standard service terms</div>
+          </div>
+
+          <div id="cardMetricInfo" class="metric-card metric-info" role="button" tabindex="0" title="Click to filter Informational clauses">
+            <div class="metric-header">
+              <span class="metric-indicator-dot"></span>
+              <span class="metric-label">Informational</span>
+            </div>
+            <div id="countInfo" class="metric-value">0</div>
+            <div class="metric-desc">Definitions &amp; general notes</div>
+          </div>
+
+          <div id="cardMetricRels" class="metric-card metric-rels" role="button" tabindex="0" title="Click to jump to Clause Relationships">
+            <div class="metric-header">
+              <span class="metric-indicator-dot"></span>
+              <span class="metric-label">Relationships</span>
+            </div>
+            <div id="countRels" class="metric-value">0</div>
+            <div class="metric-desc">Cross-clause interactions</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================================================================== -->
+      <!-- SECTION 3B: INTERACTIVE Q&A ASSISTANT (PHASE 8)                       -->
+      <!-- ===================================================================== -->
+      <div id="qaSection" class="card qa-section-card">
+        <div class="qa-header">
+          <div class="qa-title-wrap">
+            <span class="qa-badge">Grounded AI Assistant</span>
+            <h3 class="qa-title">Ask Questions About This Contract</h3>
+          </div>
+          <span class="qa-caption">Answers strictly verified against document text &bull; Zero hallucinations</span>
+        </div>
+
+        <div class="qa-input-bar">
+          <div class="input-with-clear">
+            <input type="text" id="qaQuestionInput" class="form-control qa-input" placeholder="e.g. Can they sell my personal data or renew my card automatically?">
+            <button id="btnClearQuestion" class="btn-clear hidden" aria-label="Clear question">&times;</button>
+          </div>
+          <button id="btnAskQuestion" class="btn btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            Ask Contract
+          </button>
+        </div>
+
+        <div id="qaLoader" class="qa-loader hidden">
+          <div class="spinner-sm"></div>
+          <span>Reviewing contract clauses and verifying factual citations...</span>
+        </div>
+
+        <!-- Q&A Answer Card -->
+        <div id="qaResultCard" class="qa-result-card hidden">
+          <div class="qa-result-header">
+            <span id="qaResultTag" class="tag-pill tag-accent">Answer</span>
+            <span id="qaConfidenceMeta" class="qa-confidence">Confidence: Verified</span>
+          </div>
+          <div id="qaAnswerText" class="qa-answer-text"></div>
+
+          <!-- Grounded Source Citations -->
+          <div id="qaSourcesWrap" class="qa-sources-wrap">
+            <div class="sources-title">Verified Text Citations (Click to inspect clause):</div>
+            <div id="qaSourcesList" class="qa-sources-list"></div>
+          </div>
+
+          <div id="qaInsufficientNotice" class="insufficient-alert hidden">
+            <span class="alert-icon">ℹ️</span>
+            <span id="qaInsufficientMsg">Textual evidence in this agreement is insufficient to definitively answer this question.</span>
+          </div>
+
+          <div id="qaDegradedNotice" class="degraded-notice hidden">
+            ⚠️ <span id="qaDegradedMsg">Synthesizer offline; answering using deterministic keyword extraction.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================================================================== -->
+      <!-- SECTION 3C: CLAUSES & RELATIONSHIPS TWO-COLUMN WORKBENCH              -->
+      <!-- ===================================================================== -->
+      <div class="workbench-layout">
+
+        <!-- Column 1: Filterable Clauses Feed -->
+        <div class="workbench-col-clauses">
+          <div class="toolbar-card">
+            <div class="toolbar-row">
+              <div class="search-box">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"/>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <input type="text" id="clauseSearchInput" class="search-input" placeholder="Search clauses, keywords, or legal terms...">
+              </div>
+
+              <div class="filters-group">
+                <select id="categoryFilter" class="form-select" aria-label="Filter by clause category">
+                  <option value="ALL">All Categories</option>
+                  <option value="Privacy & Data">Privacy &amp; Data</option>
+                  <option value="Payment">Payment</option>
+                  <option value="Account">Account</option>
+                  <option value="Dispute">Dispute</option>
+                  <option value="Liability">Liability</option>
+                  <option value="User Content">User Content</option>
+                  <option value="Changes">Changes</option>
+                  <option value="General">General</option>
+                </select>
+
+                <select id="attentionFilter" class="form-select" aria-label="Filter by attention level">
+                  <option value="ALL">All Attention Levels</option>
+                  <option value="HIGH">🚨 High Attention Only</option>
+                  <option value="MEDIUM">⚠️ Medium Attention</option>
+                  <option value="LOW">ℹ️ Low Attention</option>
+                  <option value="INFORMATIONAL">Informational</option>
+                </select>
+
+                <button id="btnResetFilters" class="btn btn-secondary btn-sm" title="Reset all filters">Reset</button>
+              </div>
+            </div>
+
+            <div class="toolbar-subrow">
+              <span id="clauseCountLabel" class="clause-count-label">Showing clauses</span>
+            </div>
+
+            <div class="quick-filter-pills" role="group" aria-label="Quick Risk Filters">
+              <button type="button" class="qf-pill active" data-filter="ALL" id="qfAll">All Clauses</button>
+              <button type="button" class="qf-pill qf-high" data-filter="High Attention" id="qfHigh">🚨 Critical Flags</button>
+              <button type="button" class="qf-pill qf-medium" data-filter="Medium Attention" id="qfMedium">⚠️ Notable Terms</button>
+              <button type="button" class="qf-pill qf-standard" data-filter="STANDARD" id="qfStandard">ℹ️ Standard Boilerplate</button>
+            </div>
+          </div>
+
+          <!-- Clauses Grid Container -->
+          <div id="clausesContainer" class="clauses-grid" role="list"></div>
+        </div>
+
+        <!-- Column 2: Connected Cross-Clause Relationships -->
+        <div class="workbench-col-rels">
+          <div class="rels-header-card">
+            <div class="rels-title-group">
+              <span class="rels-badge">Hidden Traps</span>
+              <h3 class="rels-column-title">Connected Relationships</h3>
+            </div>
+            <p class="rels-subtitle">Provisions that create compound risk when combined</p>
+          </div>
+
+          <!-- Relationships Feed Container -->
+          <div id="relationshipsContainer" class="relationships-feed" role="list"></div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 1: CLAUSE DETAIL & PLAIN-ENGLISH BREAKDOWN                          -->
+  <!-- ========================================================================= -->
+  <div id="clauseModal" class="modal-backdrop hidden" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="modalClauseTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-header-info">
+          <div class="badge-row">
+            <span id="modalCategoryBadge" class="tag-pill">Category</span>
+            <span id="modalAttentionBadge" class="attention-badge">Attention</span>
+          </div>
+          <h3 id="modalClauseTitle" class="modal-title">Clause Details</h3>
+          <div id="modalSourceLocation" class="modal-meta-location">Source Location</div>
+        </div>
+        <button id="btnCloseModal" class="btn-icon" aria-label="Close modal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+
+        <!-- 1. PLAIN-ENGLISH TRANSLATION & AI EXPLANATION (CONSUMER FIRST!) -->
+        <div class="modal-section-card ai-explanation-card">
+          <div class="modal-section-header">
+            <div class="section-title-wrap">
+              <span class="ai-badge">AI-GENERATED EXPLANATION</span>
+              <h4 class="modal-section-title">What This Means In Plain English</h4>
+            </div>
+            <button id="btnRefreshClauseAI" class="btn btn-link btn-sm">Request Fresh Explanation</button>
+          </div>
+
+          <div id="modalAILoader" class="modal-loader hidden">
+            <div class="spinner-sm"></div>
+            <span>Translating legalese into plain consumer takeaways...</span>
+          </div>
+
+          <div class="plain-english-content">
+            <div class="summary-subhead">PLAIN-LANGUAGE SUMMARY</div>
+            <p id="modalAISummary" class="modal-ai-summary">
+              Loading plain-English breakdown...
+            </p>
+
+            <div class="summary-subhead">WHY THIS CLAUSE REQUIRES ATTENTION</div>
+            <p id="modalAIAttentionReason" class="modal-ai-reason"></p>
+
+            <div id="modalAIKeyPointsWrap" class="key-points-block hidden">
+              <div class="points-subhead">KEY TAKEAWAYS FOR YOU:</div>
+              <ul id="modalAIKeyPoints" class="styled-points-list"></ul>
+            </div>
+
+            <div id="modalAIEvidenceWrap" class="evidence-block hidden">
+              <div class="points-subhead">VERBATIM CONTRACT EVIDENCE:</div>
+              <div id="modalAICitations" class="citations-container"></div>
+            </div>
+
+            <div id="modalAIUncertaintyWrap" class="uncertainty-box hidden">
+              <span class="alert-icon">⚠️</span>
+              <span id="modalAIUncertainty"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. DETERMINISTIC ATTENTION INDICATORS -->
+        <div class="modal-section-card">
+          <div class="modal-section-header">
+            <div class="section-title-wrap">
+              <span class="rule-badge">DETERMINISTIC ATTENTION INDICATORS</span>
+              <h4 class="modal-section-title">Contractual Red Flags Detected</h4>
+            </div>
+          </div>
+          <ul id="modalAttentionReasons" class="attention-reasons-list"></ul>
+        </div>
+
+        <!-- 3. ORIGINAL SOURCE CLAUSE (SECONDARY FOR PROOF & VERIFICATION) -->
+        <details class="modal-details-accordion" open>
+          <summary class="accordion-summary">
+            <span class="source-label">ORIGINAL SOURCE CLAUSE (UNMODIFIED LEGAL TEXT)</span>
+            <span class="accordion-hint">Click to collapse / expand full legal phrasing</span>
+          </summary>
+          <div class="original-text-wrapper">
+            <pre id="modalOriginalText" class="modal-original-text"></pre>
+          </div>
+        </details>
+
+        <!-- 4. CONNECTED CROSS-CLAUSE RELATIONSHIPS -->
+        <div id="modalRelationshipsBlock" class="modal-section-card hidden">
+          <div class="modal-section-header">
+            <h4 class="modal-section-title">Connected Cross-Clause Relationships</h4>
+          </div>
+          <div id="modalRelatedList" class="modal-related-list"></div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <span class="modal-disclaimer">Informational analysis only; not legal advice.</span>
+        <button id="btnModalCloseAction" class="btn btn-secondary">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 2: RELATIONSHIP DETAIL MODAL                                        -->
+  <!-- ========================================================================= -->
+  <div id="relModal" class="modal-backdrop hidden" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="modalRelHeadline">
+    <div class="modal-dialog modal-dialog-lg">
+      <div class="modal-header">
+        <div class="modal-header-info">
+          <div class="badge-row">
+            <span id="modalRelType" class="tag-pill tag-accent">RELATIONSHIP</span>
+            <span id="modalRelConfidence" class="tag-pill">Confidence</span>
+          </div>
+          <h3 id="modalRelHeadline" class="modal-title">Cross-Clause Interaction</h3>
+        </div>
+        <button id="btnCloseRelModal" class="btn-icon" aria-label="Close modal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Relationship Diagram / Visual Connection -->
+        <div class="rel-diagram-card">
+          <div class="diagram-node">
+            <span class="node-badge">Source Clause</span>
+            <h5 id="relDiagSourceTitle" class="node-title">Clause A</h5>
+            <p id="relDiagSourceExcerpt" class="node-excerpt"></p>
+          </div>
+          <div class="diagram-arrow">
+            <span id="relDiagArrowLabel" class="arrow-badge">interacts with</span>
+            <div class="arrow-line">&rarr;</div>
+          </div>
+          <div class="diagram-node">
+            <span class="node-badge">Target Clause</span>
+            <h5 id="relDiagTargetTitle" class="node-title">Clause B</h5>
+            <p id="relDiagTargetExcerpt" class="node-excerpt"></p>
+          </div>
+        </div>
+
+        <div class="modal-section-card">
+          <div class="modal-section-header">
+            <h4 class="modal-section-title">System Analysis &amp; Compound Risk</h4>
+          </div>
+          <p id="modalRelRationale" class="rel-rationale-text"></p>
+          <div class="trigger-box">
+            <span class="trigger-label">Trigger Condition:</span>
+            <span id="modalRelTrigger" class="trigger-text"></span>
+          </div>
+        </div>
+
+        <!-- Optional AI Deep Dive -->
+        <div class="modal-section-card">
+          <div class="modal-section-header">
+            <h4 class="modal-section-title">AI Compound Effect Synthesis</h4>
+            <button id="btnRequestRelAI" class="btn btn-link btn-sm">Request AI Breakdown</button>
+          </div>
+          <div id="relAILoader" class="modal-loader hidden">
+            <div class="spinner-sm"></div>
+            <span>Analyzing compound legal effect...</span>
+          </div>
+          <div id="relAIContent" class="hidden">
+            <p id="modalRelAISummary" class="modal-ai-summary"></p>
+            <div class="effect-box">
+              <strong>Combined Impact:</strong>
+              <span id="modalRelAIEffect"></span>
+            </div>
+            <div id="modalRelAICitations" class="citations-container"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <span class="modal-disclaimer">Informational analysis only; not legal advice.</span>
+        <button id="btnRelModalCloseAction" class="btn btn-secondary">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <p>&copy; 2026 ToS Red-Flag Scanner &bull; Evidence-First Contract Intelligence &bull; Strictly Informational</p>
+    </div>
+  </footer>
+
+  <script src="app.js?v=4"></script>
+</body>
+</html>

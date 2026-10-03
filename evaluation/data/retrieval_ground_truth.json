@@ -1,0 +1,155 @@
+{
+  "metadata": {
+    "description": "Ground truth queries for FAISS semantic retrieval evaluation across multiple similarity thresholds.",
+    "query_count": 18
+  },
+  "queries": [
+    {
+      "query": "Will my subscription renew automatically?",
+      "document_id": "doc_saas_cloud",
+      "relevant_clause_ids": [
+        "doc_saas_cloud_clause_005"
+      ],
+      "rationale": "Query directly targets auto-renewal clause Section 5."
+    },
+    {
+      "query": "Can I get a refund if I cancel my subscription early?",
+      "document_id": "doc_saas_cloud",
+      "relevant_clause_ids": [
+        "doc_saas_cloud_clause_006"
+      ],
+      "rationale": "Query targets the non-refundable payment policy in Section 6."
+    },
+    {
+      "query": "How much advance notice is required to cancel my subscription?",
+      "document_id": "doc_saas_cloud",
+      "relevant_clause_ids": [
+        "doc_saas_cloud_clause_005"
+      ],
+      "rationale": "Query targets Section 5 notice period (at least 30 days prior)."
+    },
+    {
+      "query": "Does the company share my personal information with advertisers?",
+      "document_id": "doc_saas_cloud",
+      "relevant_clause_ids": [
+        "doc_saas_cloud_clause_013"
+      ],
+      "rationale": "Query targets Section 13 sharing data with ad partners for cross-site tracking."
+    },
+    {
+      "query": "How long is my data stored after closing my account?",
+      "document_id": "doc_saas_cloud",
+      "relevant_clause_ids": [
+        "doc_saas_cloud_clause_014"
+      ],
+      "rationale": "Query targets Section 14 7-year data retention post-termination."
+    },
+    {
+      "query": "What is the maximum monetary liability of the company?",
+      "document_id": "doc_saas_cloud",
+      "relevant_clause_ids": [
+        "doc_saas_cloud_clause_017"
+      ],
+      "rationale": "Query targets Section 17 $50 aggregate liability damage cap."
+    },
+    {
+      "query": "Can I sue the company in a class action lawsuit?",
+      "document_id": "doc_saas_cloud",
+      "relevant_clause_ids": [
+        "doc_saas_cloud_clause_019"
+      ],
+      "rationale": "Query targets Section 19 class action waiver."
+    },
+    {
+      "query": "Does the company have the right to modify prices without notice?",
+      "document_id": "doc_saas_cloud",
+      "relevant_clause_ids": [
+        "doc_saas_cloud_clause_007",
+        "doc_saas_cloud_clause_010"
+      ],
+      "rationale": "Query relates to unilateral price modifications in Section 7 and terms modifications in Section 10."
+    },
+    {
+      "query": "What are the rules regarding marketplace commission fee changes?",
+      "document_id": "doc_ecommerce_marketplace",
+      "relevant_clause_ids": [
+        "doc_ecommerce_marketplace_clause_007"
+      ],
+      "rationale": "Query targets Section 7 unilateral commission fee changes."
+    },
+    {
+      "query": "Can disputes be resolved in small claims court instead of arbitration?",
+      "document_id": "doc_ecommerce_marketplace",
+      "relevant_clause_ids": [
+        "doc_ecommerce_marketplace_clause_015",
+        "doc_ecommerce_marketplace_clause_016"
+      ],
+      "rationale": "Query targets Section 15 arbitration and Section 16 small claims exception."
+    },
+    {
+      "query": "Am I required to indemnify the marketplace for copyright claims?",
+      "document_id": "doc_ecommerce_marketplace",
+      "relevant_clause_ids": [
+        "doc_ecommerce_marketplace_clause_009"
+      ],
+      "rationale": "Query targets Section 9 merchant indemnification clause."
+    },
+    {
+      "query": "How many days notice must I give to cancel my store subscription?",
+      "document_id": "doc_ecommerce_marketplace",
+      "relevant_clause_ids": [
+        "doc_ecommerce_marketplace_clause_005"
+      ],
+      "rationale": "Query targets Section 5 15-day cancellation notice requirement."
+    },
+    {
+      "query": "Does the app grant a perpetual license to use my uploaded photos?",
+      "document_id": "doc_social_media",
+      "relevant_clause_ids": [
+        "doc_social_media_clause_007",
+        "doc_social_media_clause_008"
+      ],
+      "rationale": "Query targets Section 7 perpetual license and Section 8 sublicensing."
+    },
+    {
+      "query": "Can the platform terminate my account without any prior notice?",
+      "document_id": "doc_social_media",
+      "relevant_clause_ids": [
+        "doc_social_media_clause_004"
+      ],
+      "rationale": "Query targets Section 4 immediate termination without prior notice."
+    },
+    {
+      "query": "Are digital gifts and virtual badges refundable if I change my mind?",
+      "document_id": "doc_social_media",
+      "relevant_clause_ids": [
+        "doc_social_media_clause_006"
+      ],
+      "rationale": "Query targets Section 6 non-refundable digital goods policy."
+    },
+    {
+      "query": "What happens if these API terms conflict with a signed enterprise contract?",
+      "document_id": "doc_developer_api",
+      "relevant_clause_ids": [
+        "doc_developer_api_clause_013"
+      ],
+      "rationale": "Query targets Section 13 enterprise agreement precedence override."
+    },
+    {
+      "query": "What is the maximum damages cap under these API terms?",
+      "document_id": "doc_developer_api",
+      "relevant_clause_ids": [
+        "doc_developer_api_clause_015"
+      ],
+      "rationale": "Query targets Section 15 $100 damage limitation cap."
+    },
+    {
+      "query": "Can DataForge deprecate API endpoints without advance notice?",
+      "document_id": "doc_developer_api",
+      "relevant_clause_ids": [
+        "doc_developer_api_clause_012"
+      ],
+      "rationale": "Query targets Section 12 unilateral API modifications and deprecation."
+    }
+  ]
+}

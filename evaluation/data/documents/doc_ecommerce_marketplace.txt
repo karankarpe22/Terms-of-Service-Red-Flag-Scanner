@@ -1,0 +1,55 @@
+MarketGrid Commerce - Merchant Terms of Service
+
+1. Introduction and Platform Scope
+Welcome to MarketGrid Commerce. By creating a merchant store or using our marketplace services, you enter into a legally binding agreement governed by these Merchant Terms of Service.
+
+2. Merchant Registration and Store Credentials
+Merchants must provide accurate business credentials during onboarding. You are solely responsible for safeguarding your store login credentials and must immediately report any unauthorized access to our support team.
+
+3. Immediate Merchant Account Suspension
+MarketGrid reserves the right to suspend or terminate your merchant account immediately, without notice or liability, for any violation of platform policies or fraudulent transaction activity.
+
+4. Account Cancellation by Merchant
+You may terminate your merchant store at any time through the merchant dashboard settings upon clearing all pending fulfillment orders.
+
+5. Marketplace Commission and Auto-Renewal
+Store hosting subscriptions renew automatically each month, and recurring billing charges will be deducted from your linked bank account unless cancelled at least 15 days prior to renewal.
+
+6. Non-Refundable Service Fees
+All monthly subscription fees and completed transaction processing fees are strictly non-refundable under all circumstances.
+
+7. Unilateral Commission Fee Changes
+We reserve the right to modify commission rates, transaction fees, and platform pricing at any time without prior individual notice.
+
+8. Product Content and Commercial License
+By uploading product descriptions, media, and marketing copy, you grant MarketGrid a worldwide, perpetual, royalty-free, transferable license to use, reproduce, modify, and distribute such content for marketplace promotion.
+
+9. Merchant Indemnification Obligation
+You agree to indemnify, defend, and hold harmless MarketGrid, its affiliates, and employees from any third-party claims, liabilities, or damages arising out of your products or content infringement.
+
+10. Limitation of Liability
+In no event shall MarketGrid be liable for any indirect, special, incidental, or consequential damages, and total aggregate liability shall not exceed the amount of fees paid by you in the preceding three months.
+
+11. Marketplace As-Is Disclaimer
+The platform and payment gateway are provided on an as-is basis without warranty of any kind, whether express or implied.
+
+12. Unilateral Changes to Merchant Terms
+MarketGrid may modify these terms at any time without prior notice. Your continued use of the marketplace constitutes binding acceptance of all revised terms.
+
+13. Customer Data and Privacy Compliance
+Merchants must handle buyer personal information in compliance with our Privacy Policy and applicable data protection regulations.
+
+14. Buyer Data Retention
+We retain buyer transaction history and merchant audit logs for up to seven (7) years following account termination to satisfy tax and financial reporting mandates.
+
+15. Mandatory Binding Individual Arbitration
+All disputes arising under these terms shall be settled exclusively through binding individual arbitration administered by JAMS.
+
+16. Exception for Small Claims and Intellectual Property
+Except as provided in Section 15, either party may assert qualifying claims in small claims court or seek injunctive relief in any court of competent jurisdiction for intellectual property infringement.
+
+17. Standard Cookie and Tracking Notice
+MarketGrid uses standard cookies to maintain session states and track checkout completion across the merchant portal.
+
+18. Severability and Entire Agreement
+If any provision of these terms is found unenforceable, the remaining provisions will remain in full force and effect.

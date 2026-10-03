@@ -1,0 +1,55 @@
+DataForge Developer Cloud - API Terms of Service
+
+1. Scope and Developer Agreement
+By creating a developer account or generating an API key, you enter into this binding agreement governing programmatic access to DataForge cloud endpoints.
+
+2. API Key Security and Confidentiality
+You must keep your API keys and security credentials strictly confidential. You are responsible for all calls and data egress executed using your issued credentials.
+
+3. Immediate API Key Revocation
+DataForge reserves the right to immediately suspend your API access or revoke your keys without notice for rate limit abuse, security threats, or breach of these terms.
+
+4. Developer Account Deletion
+You may request account deletion at any time, provided that all outstanding compute and bandwidth invoices are paid in full.
+
+5. API Usage Tiers and Auto-Renewal
+Developer subscriptions renew automatically on the first day of each calendar month, and recurring overage charges will be billed directly to the payment method on file.
+
+6. Non-Refundable API Credits
+All purchased API request credits and prepaid quota allowances are non-refundable and expire twelve months from purchase.
+
+7. Unilateral API Pricing Modifications
+We reserve the right to modify our pricing structure and increase API request rates at any time without prior individual notice.
+
+8. Developer Applications and Content
+You retain all intellectual property rights in the applications you build using our endpoints, subject to the limited license granted to DataForge to process API payloads.
+
+9. DataForge API Rights
+DataForge retains all worldwide rights, title, and interest in and to the API endpoints, schemas, and developer documentation.
+
+10. Developer Telemetry and Request Logging
+We collect personal information and request telemetry, including IP addresses, payload headers, and endpoint latency, to ensure platform reliability.
+
+11. Telemetry Data Retention
+We retain API usage logs and developer telemetry records for up to seven (7) years to comply with statutory legal obligations and regulatory standards.
+
+12. API Modifications and Deprecation
+DataForge may modify, alter, or deprecate API endpoints at any time. Continued use of the endpoints following any changes constitutes acceptance of modified APIs.
+
+13. Enterprise Agreement Precedence
+In the event of conflict or inconsistency between these standard terms and an executed Enterprise Master Services Agreement, the Enterprise Agreement shall control and take precedence over these terms.
+
+14. As-Is Service Disclaimer
+The API endpoints and associated developer tools are provided on an as-is and as-available basis, without warranties of uptime or performance.
+
+15. Monetary Liability Limitation
+To the maximum extent permitted by law, DataForge aggregate liability for any and all claims shall not exceed one hundred US dollars ($100.00).
+
+16. Developer Indemnification
+You agree to indemnify and hold harmless DataForge against any claims, damages, or legal liabilities arising from your applications or unauthorized access.
+
+17. Binding Arbitration and Dispute Resolution
+All legal claims arising under these terms shall be resolved exclusively through final and binding arbitration in Delaware.
+
+18. Severability
+If any term is held invalid by a competent tribunal, such invalidity shall not affect the enforceability of the remaining provisions.

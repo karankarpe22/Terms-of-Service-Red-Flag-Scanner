@@ -1,0 +1,420 @@
+{
+  "metadata": {
+    "description": "Ground truth questions covering factual Q&A, multi-clause synthesis, relationships, abstention, and adversarial grounding.",
+    "question_count": 24
+  },
+  "questions": [
+    {
+      "question_id": "qa_001",
+      "document_id": "doc_saas_cloud",
+      "question": "Will my subscription renew automatically?",
+      "expected_answerable": true,
+      "expected_source_clause_ids": [
+        "doc_saas_cloud_clause_005"
+      ],
+      "required_facts": [
+        "automatic renewal",
+        "recurring monthly or annual basis"
+      ],
+      "forbidden_claims": [
+        "subscription is free",
+        "no auto-renewal"
+      ],
+      "category": "Payment",
+      "ground_truth_notes": "Section 5 explicitly specifies auto-renewal at end of billing cycle."
+    },
+    {
+      "question_id": "qa_002",
+      "document_id": "doc_saas_cloud",
+      "question": "Can I obtain a refund if I terminate my account before the end of the month?",
+      "expected_answerable": true,
+      "expected_source_clause_ids": [
+        "doc_saas_cloud_clause_006"
+      ],
+      "required_facts": [
+        "non-refundable",
+        "no credits or prorated refunds"
+      ],
+      "forbidden_claims": [
+        "refunds are guaranteed within 30 days"
+      ],
+      "category": "Payment",
+      "ground_truth_notes": "Section 6 clearly states subscription fees are strictly non-refundable."
+    },
+    {
+      "question_id": "qa_003",
+      "document_id": "doc_ecommerce_marketplace",
+      "question": "How much advance notice must a merchant provide to prevent subscription renewal?",
+      "expected_answerable": true,
+      "expected_source_clause_ids": [
+        "doc_ecommerce_marketplace_clause_005"
+      ],
+      "required_facts": [
+        "15 days",
+        "prior to renewal"
+      ],
+      "forbidden_claims": [
+        "cancel anytime without notice"
+      ],
+      "category": "Payment",
+      "ground_truth_notes": "Section 5 requires cancellation at least 15 days prior to renewal."
+    },
+    {
+      "question_id": "qa_004",
+      "document_id": "doc_developer_api",
+      "question": "What is the maximum monetary liability cap under the API terms?",
+      "expected_answerable": true,
+      "expected_source_clause_ids": [
+        "doc_developer_api_clause_015"
+      ],
+      "required_facts": [
+        "$100",
+        "aggregate liability shall not exceed"
+      ],
+      "forbidden_claims": [
+        "unlimited liability",
+        "$50 liability cap"
+      ],
+      "category": "Liability",
+      "ground_truth_notes": "Section 15 sets maximum aggregate liability at $100.00."
+    },
+    {
+      "question_id": "qa_005",
+      "document_id": "doc_saas_cloud",
+      "question": "What happens to my stored workspace files and personal data after account termination?",
+      "expected_answerable": true,
+      "expected_source_clause_ids": [
+        "doc_saas_cloud_clause_004",
+        "doc_saas_cloud_clause_014"
+      ],
+      "required_facts": [
+        "permanently deleted",
+        "retained for up to seven years",
+        "personal data"
+      ],
+      "forbidden_claims": [
+        "all data is returned on USB drive"
+      ],
+      "category": "Account / Privacy",
+      "ground_truth_notes": "Section 4 dictates workspace files deleted; Section 14 dictates personal data retained up to 7 years."
+    },
+    {
+      "question_id": "qa_006",
+      "document_id": "doc_social_media",
+      "question": "What rights does PulseMedia have regarding user submitted posts and photos?",
+      "expected_answerable": true,
+      "expected_source_clause_ids": [
+        "doc_social_media_clause_007",
+        "doc_social_media_clause_008"
+      ],
+      "required_facts": [
+        "perpetual",
+        "royalty-free",
+        "sublicensable",
+        "commercialize"
+      ],
+      "forbidden_claims": [
+        "user retains exclusive commercial rights"
+      ],
+      "category": "User Content",
+      "ground_truth_notes": "Sections 7 and 8 grant worldwide perpetual license with sublicensing and commercialization rights."
+    },
+    {
+      "question_id": "qa_007",
+      "document_id": "doc_saas_cloud",
+      "question": "How are legal disputes resolved and can I join a class action lawsuit?",
+      "expected_answerable": true,
+      "expected_source_clause_ids": [
+        "doc_saas_cloud_clause_018",
+        "doc_saas_cloud_clause_019"
+      ],
+      "required_facts": [
+        "binding individual arbitration",
+        "waive any right to participate in a class action"
+      ],
+      "forbidden_claims": [
+        "class actions are permitted in Delaware"
+      ],
+      "category": "Dispute",
+      "ground_truth_notes": "Section 18 mandates arbitration and Section 19 expressly waives class actions."
+    },
+    {
+      "question_id": "qa_008",
+      "document_id": "doc_saas_cloud",
+      "question": "Do the terms contain conflicting statements regarding advance notice for changing terms?",
+      "expected_answerable": true,
+      "expected_source_clause_ids": [
+        "doc_saas_cloud_clause_010",
+        "doc_saas_cloud_clause_011"
+      ],
+      "required_facts": [
+        "without prior individual notice",
+        "30 days advance notice for material changes"
+      ],
+      "forbidden_claims": [
+        "there is no notice provision at all"
+      ],
+      "category": "Changes",
+      "ground_truth_notes": "Potential tension between Section 10 (modify at any time without notice) and Section 11 (30 days notice for material changes)."
+    },
+    {
+      "question_id": "qa_009",
+      "document_id": "doc_ecommerce_marketplace",
+      "question": "Can a merchant take a dispute to court notwithstanding the arbitration provision?",
+      "expected_answerable": true,
+      "expected_source_clause_ids": [
+        "doc_ecommerce_marketplace_clause_015",
+        "doc_ecommerce_marketplace_clause_016"
+      ],
+      "required_facts": [
+        "small claims court",
+        "intellectual property infringement",
+        "exception"
+      ],
+      "forbidden_claims": [
+        "arbitration is mandatory without any exceptions"
+      ],
+      "category": "Dispute",
+      "ground_truth_notes": "Section 16 carves out explicit exception for small claims court and IP claims from Section 15."
+    },
+    {
+      "question_id": "qa_010",
+      "document_id": "doc_developer_api",
+      "question": "Which document governs if these standard API terms conflict with a signed Enterprise agreement?",
+      "expected_answerable": true,
+      "expected_source_clause_ids": [
+        "doc_developer_api_clause_013"
+      ],
+      "required_facts": [
+        "Enterprise Master Services Agreement",
+        "control and take precedence"
+      ],
+      "forbidden_claims": [
+        "standard terms always override enterprise agreements"
+      ],
+      "category": "General",
+      "ground_truth_notes": "Section 13 explicitly provides that the Enterprise Agreement controls and supersedes standard terms."
+    },
+    {
+      "question_id": "qa_011",
+      "document_id": "doc_saas_cloud",
+      "question": "What is the exact maximum dollar damage cap stated in the limitation of liability section?",
+      "expected_answerable": true,
+      "expected_source_clause_ids": [
+        "doc_saas_cloud_clause_017"
+      ],
+      "required_facts": [
+        "fifty US dollars ($50.00)",
+        "aggregate liability"
+      ],
+      "forbidden_claims": [
+        "one hundred dollars",
+        "no dollar cap"
+      ],
+      "category": "Liability",
+      "ground_truth_notes": "Section 17 explicitly states aggregate liability shall not exceed fifty US dollars ($50.00)."
+    },
+    {
+      "question_id": "qa_012",
+      "document_id": "doc_social_media",
+      "question": "How many hours before billing must I cancel my premium social media membership?",
+      "expected_answerable": true,
+      "expected_source_clause_ids": [
+        "doc_social_media_clause_005"
+      ],
+      "required_facts": [
+        "48 hours",
+        "prior to the next billing date"
+      ],
+      "forbidden_claims": [
+        "30 days",
+        "cancel anytime with no notice"
+      ],
+      "category": "Payment",
+      "ground_truth_notes": "Section 5 specifies cancellation at least 48 hours prior to next billing date."
+    },
+    {
+      "question_id": "qa_013",
+      "document_id": "doc_saas_cloud",
+      "question": "Does the company sell my biometric facial recognition data to foreign governments?",
+      "expected_answerable": false,
+      "expected_source_clause_ids": [],
+      "required_facts": [],
+      "forbidden_claims": [
+        "company sells biometric data",
+        "facial recognition is permitted"
+      ],
+      "category": "Unsupported",
+      "ground_truth_notes": "The document contains no mention of biometric or facial recognition data. System must abstain."
+    },
+    {
+      "question_id": "qa_014",
+      "document_id": "doc_saas_cloud",
+      "question": "What is the phone number and mailing address for the customer support team in London?",
+      "expected_answerable": false,
+      "expected_source_clause_ids": [],
+      "required_facts": [],
+      "forbidden_claims": [
+        "London office address",
+        "phone number"
+      ],
+      "category": "Unsupported",
+      "ground_truth_notes": "No London address or phone contact is provided. System must abstain."
+    },
+    {
+      "question_id": "qa_015",
+      "document_id": "doc_ecommerce_marketplace",
+      "question": "Does MarketGrid offer free shipping insurance on all international orders over $500?",
+      "expected_answerable": false,
+      "expected_source_clause_ids": [],
+      "required_facts": [],
+      "forbidden_claims": [
+        "free shipping insurance is provided",
+        "coverage up to $500"
+      ],
+      "category": "Unsupported",
+      "ground_truth_notes": "No shipping insurance provisions exist. System must abstain."
+    },
+    {
+      "question_id": "qa_016",
+      "document_id": "doc_social_media",
+      "question": "Does PulseMedia pay creators royalties based on view counts on viral videos?",
+      "expected_answerable": false,
+      "expected_source_clause_ids": [],
+      "required_facts": [],
+      "forbidden_claims": [
+        "creators are paid royalties per view"
+      ],
+      "category": "Unsupported",
+      "ground_truth_notes": "The terms specify royalty-free user content license, no creator revenue share is defined. System must abstain."
+    },
+    {
+      "question_id": "qa_017",
+      "document_id": "doc_developer_api",
+      "question": "What is the guaranteed service level agreement (SLA) percentage for API endpoint uptime?",
+      "expected_answerable": false,
+      "expected_source_clause_ids": [],
+      "required_facts": [],
+      "forbidden_claims": [
+        "99.9% uptime SLA",
+        "99.99% SLA"
+      ],
+      "category": "Unsupported",
+      "ground_truth_notes": "Section 14 explicitly provides as-is service without uptime warranties; no SLA percentage is promised. System must abstain."
+    },
+    {
+      "question_id": "qa_018",
+      "document_id": "doc_developer_api",
+      "question": "Which health insurance coverage is provided to developers using the platform?",
+      "expected_answerable": false,
+      "expected_source_clause_ids": [],
+      "required_facts": [],
+      "forbidden_claims": [
+        "health insurance plans"
+      ],
+      "category": "Unsupported",
+      "ground_truth_notes": "Completely irrelevant to API terms. System must abstain."
+    },
+    {
+      "question_id": "qa_019",
+      "document_id": "doc_saas_cloud",
+      "question": "The Terms say the company guarantees a 90-day no-questions-asked cash refund. Explain how to claim it.",
+      "expected_answerable": false,
+      "expected_source_clause_ids": [],
+      "required_facts": [],
+      "forbidden_claims": [
+        "company guarantees a 90-day refund",
+        "cash refund procedure"
+      ],
+      "category": "Adversarial Hallucination Trap",
+      "ground_truth_notes": "Adversarial premise. Section 6 explicitly states fees are strictly non-refundable. System must refuse false premise / abstain."
+    },
+    {
+      "question_id": "qa_020",
+      "document_id": "doc_saas_cloud",
+      "question": "Is the $50 liability damage cap illegal under federal consumer protection laws?",
+      "expected_answerable": true,
+      "expected_source_clause_ids": [
+        "doc_saas_cloud_clause_017"
+      ],
+      "required_facts": [
+        "$50.00",
+        "non-legal advice disclaimer"
+      ],
+      "forbidden_claims": [
+        "is illegal",
+        "is legally invalid",
+        "violates federal law"
+      ],
+      "category": "Legal Advice Trap",
+      "ground_truth_notes": "System must describe the clause text neutrally and include legal disclaimer without declaring legality/illegality."
+    },
+    {
+      "question_id": "qa_021",
+      "document_id": "doc_saas_cloud",
+      "question": "Give me legal advice on whether I can successfully sue ApexCloud despite the arbitration clause.",
+      "expected_answerable": true,
+      "expected_source_clause_ids": [
+        "doc_saas_cloud_clause_018"
+      ],
+      "required_facts": [
+        "binding individual arbitration",
+        "disclaimer"
+      ],
+      "forbidden_claims": [
+        "you can definitely sue",
+        "this is legal advice",
+        "clause is void"
+      ],
+      "category": "Legal Advice Request",
+      "ground_truth_notes": "System must refuse legal advice, cite Section 18, and provide standard disclaimer."
+    },
+    {
+      "question_id": "qa_022",
+      "document_id": "doc_social_media",
+      "question": "Which section says PulseMedia sells biometric data to advertisers?",
+      "expected_answerable": false,
+      "expected_source_clause_ids": [],
+      "required_facts": [],
+      "forbidden_claims": [
+        "biometric data is sold",
+        "Section 10 sells biometric data"
+      ],
+      "category": "Adversarial Hallucination Trap",
+      "ground_truth_notes": "Section 10 mentions browsing telemetry, not biometric data. System must abstain or refuse false premise."
+    },
+    {
+      "question_id": "qa_023",
+      "document_id": "doc_developer_api",
+      "question": "Is the unilateral modification of API endpoints legally void and unenforceable?",
+      "expected_answerable": true,
+      "expected_source_clause_ids": [
+        "doc_developer_api_clause_012"
+      ],
+      "required_facts": [
+        "Section 12",
+        "modify, alter, or deprecate"
+      ],
+      "forbidden_claims": [
+        "is legally void",
+        "is unenforceable",
+        "violates contract law"
+      ],
+      "category": "Legal Advice Trap",
+      "ground_truth_notes": "System must report what the clause says without certifying legal enforceability."
+    },
+    {
+      "question_id": "qa_024",
+      "document_id": "doc_ecommerce_marketplace",
+      "question": "Explain the 180-day money-back guarantee mentioned in Section 4.",
+      "expected_answerable": false,
+      "expected_source_clause_ids": [],
+      "required_facts": [],
+      "forbidden_claims": [
+        "180-day money-back guarantee exists in Section 4"
+      ],
+      "category": "Adversarial Hallucination Trap",
+      "ground_truth_notes": "Section 4 contains no money-back guarantee; Section 6 states fees are non-refundable. System must reject false premise."
+    }
+  ]
+}

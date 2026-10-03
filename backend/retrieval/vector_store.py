@@ -9,7 +9,7 @@ FAISS is strictly a retrieval mechanism for semantically relevant clauses.
 It does not determine legality, enforceability, or compliance.
 """
 from dataclasses import dataclass, field
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Set
 import re
 import faiss
 import numpy as np
@@ -31,6 +31,35 @@ STOP_WORDS = {
     "themselves", "then", "there", "these", "they", "this", "those", "through", "to", "too",
     "under", "until", "up", "very", "was", "we", "were", "what", "when", "where", "which",
     "while", "who", "whom", "why", "will", "with", "would", "you", "your", "yours", "yourself",
+}
+
+# Domain synonym expansions for common consumer contract and ToS inquiries
+CONTRACT_SYNONYM_MAP: Dict[str, List[str]] = {
+    # Security, data protection, privacy
+    "safe": ["secure", "security", "protect", "protection", "safeguard", "confidential"],
+    "safety": ["secure", "security", "protect", "protection", "safeguard"],
+    "secure": ["safe", "security", "protect", "safeguard", "confidential"],
+    "security": ["safe", "secure", "protect", "protection", "safeguard"],
+    "protect": ["safe", "secure", "security", "safeguard"],
+    "protection": ["safe", "secure", "security", "safeguard"],
+    "data": ["information", "privacy", "personal", "content", "records"],
+    "privacy": ["data", "information", "personal", "confidential"],
+    "private": ["privacy", "data", "confidential"],
+    # Financial, payments, refunds
+    "money": ["refund", "fee", "payment", "charge", "price", "billing", "cost"],
+    "refund": ["money", "reimburse", "return", "payment", "charge", "fee"],
+    "refunds": ["money", "reimburse", "return", "payment", "charge", "fee"],
+    "pay": ["payment", "fee", "charge", "billing", "subscription", "cost"],
+    "payment": ["fee", "charge", "billing", "subscription", "price", "refund"],
+    # Termination, cancellation, account deletion
+    "cancel": ["terminate", "discontinue", "end", "stop", "close", "cancellation"],
+    "cancellation": ["cancel", "terminate", "discontinue", "end", "stop"],
+    "delete": ["remove", "erase", "purge", "retention", "deletion"],
+    "deletion": ["delete", "remove", "erase", "purge", "retention"],
+    # Legal disputes, litigation, arbitration
+    "sue": ["arbitration", "dispute", "court", "jury", "class action", "litigation"],
+    "lawsuit": ["arbitration", "dispute", "court", "jury", "class action", "litigation"],
+    "court": ["arbitration", "dispute", "jury", "class action", "litigation"],
 }
 
 
@@ -146,11 +175,17 @@ class FAISSDocumentIndex:
         candidate_k = min(self.index.ntotal, max(top_k * 4, 15))
         scores, indices = self.index.search(query_vec, candidate_k)
 
-        # Extract substantive query tokens for lexical matching
+        # Extract substantive query tokens for lexical matching (with domain synonym expansion)
         query_tokens: List[str] = []
+        synonym_tokens: List[str] = []
         if query_text:
             raw_tokens = re.findall(r"\b[a-zA-Z]{2,}\b", query_text.lower())
             query_tokens = [t for t in raw_tokens if t not in STOP_WORDS]
+            expanded: Set[str] = set()
+            for t in query_tokens:
+                if t in CONTRACT_SYNONYM_MAP:
+                    expanded.update(CONTRACT_SYNONYM_MAP[t])
+            synonym_tokens = [s for s in expanded if s not in query_tokens]
 
         results: List[ClauseSearchResult] = []
         for score, idx in zip(scores[0], indices[0]):
@@ -169,21 +204,35 @@ class FAISSDocumentIndex:
 
             base_score = float(score)
             lexical_boost = 0.0
-            if query_tokens:
+            if query_tokens or synonym_tokens:
                 title_lower = (clause.section_title or "").lower()
                 text_lower = clause.text.lower()
 
-                title_matches = sum(
+                # Direct token matches (highest weight)
+                title_direct = sum(
                     1 for t in query_tokens if t in title_lower or any(w.startswith(t) for w in title_lower.split())
                 )
-                body_matches = sum(
+                body_direct = sum(
                     1 for t in query_tokens if t in text_lower or any(w.startswith(t) for w in text_lower.split())
                 )
 
-                if title_matches > 0:
-                    lexical_boost += 0.08 * min(title_matches, 2)
-                if body_matches > 0:
-                    lexical_boost += 0.04 * min(body_matches, 2)
+                # Synonym token matches (supporting weight for domain terms)
+                title_syn = sum(
+                    1 for s in synonym_tokens if s in title_lower or any(w.startswith(s) for w in title_lower.split())
+                )
+                body_syn = sum(
+                    1 for s in synonym_tokens if s in text_lower or any(w.startswith(s) for w in text_lower.split())
+                )
+
+                if title_direct > 0:
+                    lexical_boost += 0.08 * min(title_direct, 2)
+                elif title_syn > 0:
+                    lexical_boost += 0.04 * min(title_syn, 2)
+
+                if body_direct > 0:
+                    lexical_boost += 0.04 * min(body_direct, 2)
+                elif body_syn > 0:
+                    lexical_boost += 0.02 * min(body_syn, 2)
 
                 lexical_boost = min(lexical_boost, 0.15)
 

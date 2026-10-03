@@ -17,13 +17,15 @@ def normalize_encoding_artifacts(text: str) -> str:
     # Normalize line endings
     text = text.replace("\r\n", "\n").replace("\r", "\n")
 
-    # Replace zero-width spaces and non-breaking spaces
-    text = text.replace("\u200b", "").replace("\ufeff", "")
-    text = text.replace("\u00a0", " ")
+    # Strip zero-width and invisible format characters (Word Joiner, ZWSP, ZWNJ, ZWJ, BOM, soft hyphen, etc.)
+    text = re.sub(r"[\u200b-\u200d\u2060\ufeff\u00ad\u200e\u200f\u202a-\u202e\u2066-\u2069]", "", text)
 
-    # Standardize curly quotes to straight quotes
-    text = re.sub(r"[\u2018\u2019\u201a\u201b]", "'", text)
-    text = re.sub(r"[\u201c\u201d\u201e\u201f]", '"', text)
+    # Standardize non-breaking spaces and special whitespace variants to standard ASCII space
+    text = re.sub(r"[\u00a0\u2000-\u200a\u202f\u205f\u3000]", " ", text)
+
+    # Standardize curly quotes, smart quotes, and backticks to straight quotes
+    text = re.sub(r"[\u2018\u2019\u201a\u201b`´]", "'", text)
+    text = re.sub(r"[\u201c\u201d\u201e\u201f«»]", '"', text)
 
     # Standardize en/em dashes to standard hyphen/dash
     text = re.sub(r"\s*[\u2013\u2014]\s*", " - ", text)

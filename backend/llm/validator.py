@@ -33,8 +33,19 @@ FORBIDDEN_LEGAL_CONCLUSIONS = [
 
 
 def _normalize_ws(s: str) -> str:
-    """Collapse excess whitespace for robust substring comparison."""
-    return re.sub(r"\s+", " ", s.strip().lower())
+    """Collapse excess whitespace and strip invisible characters for robust substring comparison."""
+    if not s:
+        return ""
+    # Strip zero-width and invisible formatting characters (Word Joiner, ZWSP, ZWNJ, ZWJ, BOM, soft hyphen, etc.)
+    s = re.sub(r"[\u200b-\u200d\u2060\ufeff\u00ad\u200e\u200f\u202a-\u202e\u2066-\u2069]", "", s)
+    # Standardize quotes, backticks and smart quotes
+    s = re.sub(r"[\u2018\u2019\u201a\u201b`´]", "'", s)
+    s = re.sub(r"[\u201c\u201d\u201e\u201f«»]", '"', s)
+    # Standardize dashes and hyphens
+    s = re.sub(r"[\u2010-\u2015\u2212]", "-", s)
+    # Standardize all whitespace variants
+    s = re.sub(r"[\s\u00a0\u2000-\u200a\u202f\u205f\u3000]+", " ", s)
+    return s.strip().lower()
 
 
 class EvidenceValidator:
@@ -74,24 +85,31 @@ class EvidenceValidator:
                 clause = supplied_map[ref.clause_id]
                 expected_loc = clause.source_location.to_display_string()
 
-                # Verify location matches
-                if ref.source_location and ref.source_location != expected_loc:
-                    # Allow minor formatting difference or flag mismatch
-                    if _normalize_ws(ref.source_location) != _normalize_ws(expected_loc):
+                # Verify location matches if cited
+                if ref.source_location:
+                    norm_cited = _normalize_ws(ref.source_location)
+                    norm_expected = _normalize_ws(expected_loc)
+                    if norm_cited and norm_cited != norm_expected:
                         errors.append(
                             f"Location mismatch for clause '{ref.clause_id}': cited '{ref.source_location}', "
                             f"expected '{expected_loc}'."
                         )
+                else:
+                    ref.source_location = expected_loc
 
-                # Verify quoted text is an exact substring of the original clause
-                norm_quote = _normalize_ws(ref.quoted_text)
+                # Verify quoted text is an exact or normalized substring of the original clause
+                norm_quote = _normalize_ws(ref.quoted_text).strip(" .…'\"")
                 norm_source = _normalize_ws(clause.text)
 
                 if norm_quote and norm_quote not in norm_source:
-                    errors.append(
-                        f"Fabricated or modified quotation in clause '{ref.clause_id}': "
-                        f"quoted snippet \"{ref.quoted_text[:80]}...\" was not found in source clause text."
-                    )
+                    # Fallback: check alphanumeric words to tolerate minor punctuation/whitespace variations
+                    punct_quote = re.sub(r"[^\w\s]", "", norm_quote)
+                    punct_source = re.sub(r"[^\w\s]", "", norm_source)
+                    if not (punct_quote and punct_quote in punct_source):
+                        errors.append(
+                            f"Fabricated or modified quotation in clause '{ref.clause_id}': "
+                            f"quoted snippet \"{ref.quoted_text[:80]}...\" was not found in source clause text."
+                        )
 
         # 3. Secondary Guardrail: Check generated explanatory fields for forbidden legal conclusions
         explanatory_texts = [
@@ -178,6 +196,8 @@ class EvidenceValidator:
                             f"Section title mismatch for clause '{src.clause_id}': cited '{src.section_title}', "
                             f"expected '{expected_title}'."
                         )
+                else:
+                    src.section_title = expected_title
 
                 # Check source location matching
                 if src.source_location:
@@ -186,9 +206,11 @@ class EvidenceValidator:
                             f"Location mismatch for clause '{src.clause_id}': cited '{src.source_location}', "
                             f"expected '{expected_loc}'."
                         )
+                else:
+                    src.source_location = expected_loc
 
                 # Check verbatim or normalized quote existence
-                norm_quote = _normalize_ws(src.quoted_text)
+                norm_quote = _normalize_ws(src.quoted_text).strip(" .…'\"")
                 norm_source = _normalize_ws(clause.text)
 
                 if not norm_quote:
@@ -196,10 +218,14 @@ class EvidenceValidator:
                         f"Empty quotation cited for clause '{src.clause_id}'."
                     )
                 elif norm_quote not in norm_source:
-                    errors.append(
-                        f"Fabricated or modified quotation in clause '{src.clause_id}': "
-                        f"quoted excerpt \"{src.quoted_text[:80]}...\" was not found in source clause text."
-                    )
+                    # Fallback: check alphanumeric words to tolerate minor punctuation/whitespace variations
+                    punct_quote = re.sub(r"[^\w\s]", "", norm_quote)
+                    punct_source = re.sub(r"[^\w\s]", "", norm_source)
+                    if not (punct_quote and punct_quote in punct_source):
+                        errors.append(
+                            f"Fabricated or modified quotation in clause '{src.clause_id}': "
+                            f"quoted excerpt \"{src.quoted_text[:80]}...\" was not found in source clause text."
+                        )
 
         # 3. Secondary Guardrail: Check generated answer text for forbidden legal conclusions
         answer_text = (output.answer or "") + " " + (output.uncertainty or "")

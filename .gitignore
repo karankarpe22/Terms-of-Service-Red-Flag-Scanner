@@ -61,3 +61,6 @@ runtime/
 # Operating System
 .DS_Store
 Thumbs.db
+
+# Local Handoff Notes
+PROJECT_HANDOFF_CONTEXT.txt

@@ -3,10 +3,21 @@
 Loads the model once and provides reusable, batched embedding generation.
 Normalizes embeddings to unit length for high-performance cosine similarity computation.
 """
+import gc
+import torch
 from typing import List, Union
 import numpy as np
 from sentence_transformers import SentenceTransformer
 from backend.config import settings
+
+# Restrict PyTorch to 1 CPU thread and disable autograd to stay comfortably under 512MB RAM
+torch.set_num_threads(1)
+if hasattr(torch, "set_num_interop_threads"):
+    try:
+        torch.set_num_interop_threads(1)
+    except RuntimeError:
+        pass
+torch.set_grad_enabled(False)
 
 _EMBEDDING_SERVICE = None
 
@@ -16,12 +27,14 @@ class EmbeddingService:
 
     def __init__(self, model_name: str = None):
         self.model_name = model_name or settings.EMBEDDING_MODEL
-        self._model = SentenceTransformer(self.model_name)
+        self._model = SentenceTransformer(self.model_name, device="cpu")
+        self._model.eval()
+        gc.collect()
 
     def encode(
         self,
         texts: Union[str, List[str]],
-        batch_size: int = 32,
+        batch_size: int = 16,
     ) -> np.ndarray:
         """Generate normalized vector embeddings for a text or list of texts.
 
@@ -34,13 +47,15 @@ class EmbeddingService:
         if not input_list:
             return np.empty((0, 384), dtype=np.float32)
 
-        embeddings = self._model.encode(
-            input_list,
-            batch_size=batch_size,
-            normalize_embeddings=True,
-            convert_to_numpy=True,
-            show_progress_bar=False,
-        )
+        with torch.no_grad():
+            embeddings = self._model.encode(
+                input_list,
+                batch_size=min(batch_size, 16),
+                normalize_embeddings=True,
+                convert_to_numpy=True,
+                show_progress_bar=False,
+            )
+        gc.collect()
 
         if is_single:
             return embeddings[0]

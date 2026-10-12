@@ -26,6 +26,8 @@ app.include_router(api_router)
 
 from pathlib import Path
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+from fastapi import Request
 
 # Mount frontend web interface
 FRONTEND_DIR = Path(__file__).resolve().parent.parent / "frontend"
@@ -33,10 +35,25 @@ if FRONTEND_DIR.exists():
     app.mount("/app", StaticFiles(directory=str(FRONTEND_DIR), html=True), name="frontend")
 
 
+@app.get("/styles.css")
+async def styles():
+    """Serve frontend stylesheet at root level."""
+    return FileResponse(FRONTEND_DIR / "styles.css", media_type="text/css")
+
+
+@app.get("/app.js")
+async def script():
+    """Serve frontend application logic at root level."""
+    return FileResponse(FRONTEND_DIR / "app.js", media_type="application/javascript")
+
 
 @app.get("/")
-async def root():
-    """Root endpoint providing service metadata and disclaimer."""
+async def root(request: Request):
+    """Root endpoint providing service metadata and disclaimer, or serving UI for browsers."""
+    accept = request.headers.get("accept", "")
+    if "text/html" in accept and not accept.startswith("*/*") and (FRONTEND_DIR / "index.html").exists():
+        return FileResponse(FRONTEND_DIR / "index.html")
+
     return {
         "service": "ToS Red-Flag Scanner API",
         "version": "0.1.0",

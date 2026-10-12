@@ -18,9 +18,9 @@ This application processes machine-readable ToS documents (PDF or pasted text), 
 
 ---
 
-## 2. Supported Categories & Attention Levels
+## 2. Supported Categories, Attention Levels & Relationships
 
-### Categories
+### Canonical Categories (8)
 - Privacy & Data
 - Payment
 - Account
@@ -28,52 +28,67 @@ This application processes machine-readable ToS documents (PDF or pasted text), 
 - Liability
 - User Content
 - Changes
+- General (default fallback for provisions below classification threshold)
 
-### Attention Levels
-- `High Attention`
-- `Medium Attention`
-- `Low Attention`
-- `Informational`
+### Attention Levels (4)
+- `High Attention` ($\ge 2$ strong indicators: binding arbitration, non-refundable charges, broad licenses)
+- `Medium Attention` ($1$ strong indicator: unilateral updates, prolonged data retention)
+- `Low Attention` ($\ge 1$ weak indicator: standard 'as-is' warranty disclaimer, general review notice)
+- `Informational` (standard boilerplate without elevated attention indicators)
 
-*(The system explicitly avoids using "legal risk scores".)*
+*(The system evaluates deterministic contractual indicators and explicitly avoids "legal risk scores" or assertions of illegality).*
+
+### Canonical Cross-Clause Relationship Types (7)
+- `SUPPORTS`: Explicit cross-references providing procedural elaboration (never an indiscriminate generic fallback)
+- `QUALIFIES`: Scope limitations or restrictive provisos ("to the maximum extent permitted by law")
+- `EXCEPTS`: Explicit carve-outs or exception phrasing ("except as provided herein")
+- `OVERRIDES`: Supremacy or precedence language ("in the event of conflict, this section shall control")
+- `DEPENDS_ON`: Operational or conditional dependencies ("subject to the provisions of Section X")
+- `TEMPORAL`: Timing sequence, notice windows, billing cycles, or post-termination retention horizons
+- `POTENTIAL_TENSION`: Potential textual or conditional friction between clauses (e.g. cancel anytime vs. advance renewal notice requirement; strictly cross-clause tension, never a legal conflict or violation)
 
 ---
 
 ## 3. Technology Stack
 
-- **Backend**: Python 3.10+, FastAPI, Uvicorn, Pydantic v2
-- **Document Processing**: PyMuPDF (`fitz`) for machine-readable PDFs (OCR is out of scope for MVP)
-- **Embeddings**: `sentence-transformers/all-MiniLM-L6-v2`
-- **Vector Store**: FAISS (`faiss-cpu`) with configurable similarity thresholding
-- **Generative AI**: Google Gemini API via official SDK (`google-genai`)
-- **Testing**: `pytest`, `httpx`
+- **Backend**: Python 3.10+ (tested on Python 3.13), FastAPI, Uvicorn, Pydantic v2
+- **Document Processing**: PyMuPDF (`fitz` $\ge 1.24.0$) for page-by-page machine-readable PDF extraction (OCR is out of scope)
+- **Embeddings**: `sentence-transformers/all-MiniLM-L6-v2` (384 dimensions, L2-normalized)
+- **Vector Store**: FAISS (`faiss-cpu`) with strict per-document isolated indices, calibrated retrieval threshold (`0.35`), and domain synonym lexical boosting (`CONTRACT_SYNONYM_MAP`)
+- **Generative AI (Runtime)**: Google Gemini API (`gemini-2.5-flash`, `gemini-3.5-flash-lite`) via official modern SDK (`google-genai`) with structured JSON schema enforcement and deterministic mock mode
+- **Evidence Validator**: Post-generation verbatim quote substring validation and forbidden legal conclusion guardrails
+- **Frontend**: Responsive Vanilla Web UI (HTML5, modern CSS3 Glassmorphism design tokens, Vanilla JavaScript; zero external UI frameworks)
+- **Testing**: `pytest`, `httpx` (130 automated test cases)
 
 ---
 
 ## 4. Folder Structure
 
 ```text
-├── .env.example              # Environment variables template
-├── .gitignore                # Ignored files (secrets, venv, caches)
-├── requirements.txt          # Python dependencies
-├── README.md                 # Primary project documentation
-├── SYSTEM_ARCHITECTURE.md    # Complete end-to-end system architecture blueprint
-├── BACKEND_ARCHITECTURE.md   # Backend architecture & frontend integration guide
-├── docs/                     # Product, technical & design specifications (PRD, TRD, ADRs)
-├── backend/                  # Backend core application
-│   ├── main.py               # FastAPI entrypoint & static mounting
-│   ├── config.py             # Environment configuration (Pydantic Settings)
-│   ├── core/                 # Domain constants and disclaimers
-│   ├── api/                  # Routes, schemas, REST endpoints
-│   ├── document/             # PDF extraction, cleaning, segmentation, store
-│   ├── analysis/             # Classification, attention scoring, relationships
-│   ├── retrieval/            # Embeddings (MiniLM) & FAISS vector store
-│   ├── llm/                  # Google GenAI Gemini client, prompts, validator
-│   └── evaluation/           # Evaluation metrics suite
-├── frontend/                 # Interactive web interface (HTML5, CSS3, JS)
-├── evaluation/               # Benchmark datasets, evaluation scripts & results
-├── tests/                    # 130 automated unit, integration, and safety tests
-└── data/                     # Sample Terms of Service documents
+├── .env.example                  # Environment variables template
+├── .gitignore                    # Ignored files (secrets, venv, caches, handoff notes)
+├── requirements.txt              # Python dependencies
+├── README.md                     # Primary project documentation
+├── FINAL_IMPLEMENTATION_AUDIT.md # Phase F0 comprehensive verification report
+├── FINAL_DOCUMENTATION_STATUS.md # Phase F1 documentation consolidation status
+├── backend/                      # Backend core application
+│   ├── main.py                   # FastAPI entrypoint, CORS & static mounting
+│   ├── config.py                 # Centralized environment configuration (Pydantic Settings)
+│   ├── core/                     # Domain constants, canonical categories, disclaimers
+│   ├── api/                      # REST routes, schemas, request/response models
+│   ├── document/                 # PDF extraction (PyMuPDF), cleaning, segmentation, store
+│   ├── analysis/                 # Multi-label classifier, attention scoring, relationship engine
+│   ├── retrieval/                # Embeddings (MiniLM) & isolated FAISS vector store
+│   └── llm/                      # Google GenAI Gemini client, prompts, evidence validator
+├── frontend/                     # Interactive web interface (HTML5, CSS3, JS)
+│   ├── app.js                    # UI logic, state management, modal handling, Q&A console
+│   ├── index.html                # Semantic UI layout, stepper, clause explorer, filters
+│   └── styles.css                # Dark theme tokens, glassmorphism, responsive cards
+├── evaluation/                   # Benchmark datasets, evaluation runner & results
+│   ├── data/                     # Annotated ToS test documents
+│   └── results/                  # Empirical evaluation report and confusion matrices
+├── tests/                        # 130 automated unit, integration, and safety tests
+└── data/                         # Sample Terms of Service documents
 ```
 
 ---

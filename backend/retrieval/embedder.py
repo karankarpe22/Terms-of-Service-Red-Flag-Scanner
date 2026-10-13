@@ -19,6 +19,10 @@ if hasattr(torch, "set_num_interop_threads"):
         pass
 torch.set_grad_enabled(False)
 
+from pathlib import Path
+
+LOCAL_MODEL_DIR = Path(__file__).resolve().parent.parent.parent / "models" / "all-MiniLM-L6-v2"
+
 _EMBEDDING_SERVICE = None
 
 
@@ -26,7 +30,13 @@ class EmbeddingService:
     """Singleton service for generating dense semantic embeddings."""
 
     def __init__(self, model_name: str = None):
-        self.model_name = model_name or settings.EMBEDDING_MODEL
+        if model_name:
+            self.model_name = model_name
+        elif LOCAL_MODEL_DIR.exists():
+            self.model_name = str(LOCAL_MODEL_DIR)
+        else:
+            self.model_name = settings.EMBEDDING_MODEL
+
         self._model = SentenceTransformer(self.model_name, device="cpu")
         self._model.eval()
         gc.collect()

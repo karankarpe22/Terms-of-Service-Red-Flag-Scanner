@@ -51,6 +51,7 @@ uploads/
 runtime/
 *.faiss
 *.pkl
+models/
 
 # IDEs & Editors
 .vscode/

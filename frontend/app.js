@@ -569,8 +569,24 @@ async function executeAnalysisPipeline() {
       });
 
       if (!res.ok) {
-        const err = await res.json().catch(() => ({ detail: res.statusText }));
-        throw new Error(err.detail || 'Failed to upload and parse PDF document.');
+        let msg = `Server error (${res.status})`;
+        try {
+          const err = await res.json();
+          if (err && err.detail) {
+            msg = typeof err.detail === 'string' ? err.detail : JSON.stringify(err.detail);
+          }
+        } catch {
+          if (res.status === 502) {
+            msg = 'Server temporarily unavailable (502 Bad Gateway). The document may exceed free-tier memory, or the server is restarting.';
+          } else if (res.status === 413) {
+            msg = 'The uploaded file is too large (HTTP 413 Payload Too Large).';
+          } else if (res.status === 504) {
+            msg = 'Processing timed out (HTTP 504 Gateway Timeout).';
+          } else if (res.statusText) {
+            msg = `${res.statusText} (${res.status})`;
+          }
+        }
+        throw new Error(msg);
       }
       uploadData = await res.json();
 
@@ -585,8 +601,20 @@ async function executeAnalysisPipeline() {
       });
 
       if (!res.ok) {
-        const err = await res.json().catch(() => ({ detail: res.statusText }));
-        throw new Error(err.detail || 'Failed to submit and segment text.');
+        let msg = `Server error (${res.status})`;
+        try {
+          const err = await res.json();
+          if (err && err.detail) {
+            msg = typeof err.detail === 'string' ? err.detail : JSON.stringify(err.detail);
+          }
+        } catch {
+          if (res.status === 502) {
+            msg = 'Server temporarily unavailable (502 Bad Gateway).';
+          } else if (res.statusText) {
+            msg = `${res.statusText} (${res.status})`;
+          }
+        }
+        throw new Error(msg);
       }
       uploadData = await res.json();
     }

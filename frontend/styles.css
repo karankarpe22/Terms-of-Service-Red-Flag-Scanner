@@ -810,6 +810,33 @@ body {
   margin-bottom: 6px;
 }
 
+.point-bullet {
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.point-bullet::before {
+  content: "•";
+  position: absolute;
+  left: 6px;
+  color: var(--brand-primary);
+  font-weight: bold;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spin-animation {
+  animation: spin 1s linear infinite;
+}
+
 .degraded-notice {
   margin-top: 12px;
   padding: 8px 12px;

@@ -15,10 +15,10 @@ class Settings:
     LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
 
     # Generative AI settings (Google Gemini API) - Phase 6
-    GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
+    GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "").strip().strip("'\"")
     GEMINI_MODEL_NAME: str = os.getenv(
         "GEMINI_MODEL_NAME", os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
-    )
+    ).strip().strip("'\"")
     GEMINI_TEMPERATURE: float = float(os.getenv("GEMINI_TEMPERATURE", "0.2"))
     GEMINI_MAX_OUTPUT_TOKENS: int = int(os.getenv("GEMINI_MAX_OUTPUT_TOKENS", "2048"))
     GEMINI_MOCK_MODE: bool = os.getenv("GEMINI_MOCK_MODE", "false").lower() in (

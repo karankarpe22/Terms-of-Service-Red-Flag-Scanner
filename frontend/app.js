@@ -320,7 +320,7 @@ function initEventListeners() {
 
   // Re-Analyze / New Scan
   dom.btnNewScan.addEventListener('click', resetToInputSection);
-  dom.btnReanalyze.addEventListener('click', resetToInputSection);
+  dom.btnReanalyze.addEventListener('click', refreshExecutiveSynthesis);
 
   // Metric Card Clicks (Filter shortcuts with toggle support)
   dom.cardMetricHigh.addEventListener('click', () => {
@@ -709,6 +709,56 @@ function resetToInputSection() {
   dom.btnNewScan.classList.add('hidden');
   resetQAView();
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+async function refreshExecutiveSynthesis() {
+  if (!state.documentId) {
+    resetToInputSection();
+    return;
+  }
+
+  const originalBtnHtml = dom.btnReanalyze.innerHTML;
+  dom.btnReanalyze.disabled = true;
+  dom.btnReanalyze.innerHTML = `
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spin-animation">
+      <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+      <path d="M3 3v5h5"/>
+      <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
+      <path d="M21 21v-5h-5"/>
+    </svg>
+    Refreshing...
+  `;
+
+  dom.synthesisDegradedNotice.classList.add('hidden');
+  dom.synthesisSummary.textContent = 'Generating plain-English executive briefing with Gemini AI...';
+  dom.synthesisKeyPoints.innerHTML = '';
+
+  try {
+    const synPayload = state.selectedConcerns && state.selectedConcerns.length > 0
+      ? { user_concerns: state.selectedConcerns }
+      : {};
+
+    const synRes = await fetch(`${API_BASE_URL}/documents/${state.documentId}/synthesize`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(synPayload),
+    });
+
+    if (synRes.ok) {
+      const synData = await synRes.json();
+      state.synthesis = synData;
+    } else {
+      console.warn('Synthesis returned non-200');
+      state.synthesis = null;
+    }
+  } catch (err) {
+    console.error('Failed to refresh synthesis:', err);
+    state.synthesis = null;
+  } finally {
+    renderSynthesisBlock();
+    dom.btnReanalyze.innerHTML = originalBtnHtml;
+    dom.btnReanalyze.disabled = false;
+  }
 }
 
 function resetQAView() {

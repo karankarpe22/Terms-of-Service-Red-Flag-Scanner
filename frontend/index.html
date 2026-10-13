@@ -240,12 +240,13 @@
     <!-- ========================================================================= -->
     <section id="resultsSection" class="results-section hidden">
 
-      <!-- Executive Overview Card -->
-      <div class="card executive-card">
+      <!-- Executive Overview Hero Card with Interactive Risk Gauge -->
+      <div class="card executive-card dashboard-hero">
         <div class="executive-top">
           <div class="doc-badge-group">
             <span id="resSourceType" class="tag-pill">Document</span>
             <span id="resDocId" class="tag-pill tag-muted">doc_id</span>
+            <span id="resClauseBadge" class="tag-pill tag-accent">Total Clauses</span>
           </div>
           <div class="executive-actions">
             <button id="btnReanalyze" class="btn btn-secondary btn-sm" title="Re-run analysis">
@@ -260,72 +261,209 @@
           </div>
         </div>
 
-        <h2 id="resDocTitle" class="doc-main-title">Terms of Service Analysis</h2>
+        <!-- Hero Grid: Risk Gauge (Left) & Executive Plain-English Briefing (Right) -->
+        <div class="dashboard-hero-grid">
+          <!-- Contract Risk Gauge Visualizer -->
+          <div class="risk-gauge-card">
+            <div class="gauge-header">
+              <span class="gauge-title-badge">Contract Risk Index</span>
+              <span id="riskVerdictBadge" class="risk-verdict-badge verdict-moderate">Calculating...</span>
+            </div>
+            
+            <div class="svg-gauge-wrapper">
+              <svg id="riskGaugeSvg" class="risk-gauge-svg" viewBox="0 0 200 125">
+                <defs>
+                  <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#10B981" />
+                    <stop offset="45%" stop-color="#F59E0B" />
+                    <stop offset="85%" stop-color="#EF4444" />
+                  </linearGradient>
+                  <filter id="gaugeGlow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="3" result="blur" />
+                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                  </filter>
+                </defs>
+                <!-- Background Arc -->
+                <path class="gauge-bg-arc" d="M 25 105 A 75 75 0 0 1 175 105" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="15" stroke-linecap="round"/>
+                <!-- Colored Value Arc (Semi-circle circumference is ~235.6) -->
+                <path id="gaugeValueArc" class="gauge-value-arc" d="M 25 105 A 75 75 0 0 1 175 105" fill="none" stroke="url(#gaugeGradient)" stroke-width="15" stroke-linecap="round" stroke-dasharray="235.6" stroke-dashoffset="235.6" filter="url(#gaugeGlow)"/>
+              </svg>
+              <div class="gauge-center-content">
+                <span id="gaugeScoreNumber" class="gauge-score-value">0</span>
+                <span class="gauge-score-scale">/ 100</span>
+                <span id="gaugeScoreLabel" class="gauge-score-label">Risk Exposure</span>
+              </div>
+            </div>
 
-        <!-- Executive Plain-English Summary -->
-        <div class="executive-summary-block">
-          <div class="summary-label">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-              <circle cx="12" cy="13" r="3"/>
-            </svg>
-            Executive Plain-English Briefing
+            <!-- Risk Factor Mini Summary -->
+            <div class="gauge-submetrics">
+              <div class="gauge-submetric-item">
+                <span class="submetric-val" id="riskTrapRatio">0%</span>
+                <span class="submetric-lbl">One-Sided Terms</span>
+              </div>
+              <div class="gauge-submetric-divider"></div>
+              <div class="gauge-submetric-item">
+                <span class="submetric-val" id="riskCompoundScore">0</span>
+                <span class="submetric-lbl">Interlocking Traps</span>
+              </div>
+            </div>
           </div>
-          <p id="synthesisSummary" class="executive-summary-text">
-            Analyzing key provisions and risk exposures...
-          </p>
-          <div id="synthesisKeyPoints" class="executive-key-points"></div>
-          <div id="synthesisDegradedNotice" class="degraded-notice hidden">
-            ⚠️ Gemini AI synthesis is temporarily degraded; deterministic risk rules and raw evidence remain 100% active.
+
+          <!-- Executive Plain-English Briefing -->
+          <div class="executive-summary-block">
+            <div class="summary-label">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <circle cx="12" cy="13" r="3"/>
+              </svg>
+              Executive Plain-English Briefing
+            </div>
+            <h2 id="resDocTitle" class="doc-main-title">Terms of Service Analysis</h2>
+            <p id="synthesisSummary" class="executive-summary-text">
+              Analyzing key provisions and risk exposures...
+            </p>
+            <div id="synthesisKeyPoints" class="executive-key-points"></div>
+            <div id="synthesisDegradedNotice" class="degraded-notice hidden">
+              ⚠️ Gemini AI synthesis is temporarily degraded; deterministic risk rules and raw evidence remain 100% active.
+            </div>
           </div>
         </div>
 
-        <!-- Metric Badges / Quick Attention Filters -->
+        <!-- Metric Badges / Quick Attention Filters with Micro-Visualizers -->
         <div class="metrics-row">
           <div id="cardMetricHigh" class="metric-card metric-high" role="button" tabindex="0" title="Click to filter High Attention clauses">
             <div class="metric-header">
               <span class="metric-indicator-dot"></span>
               <span class="metric-label">High Attention</span>
+              <span id="pctMetricHigh" class="metric-pct">0%</span>
             </div>
             <div id="countHigh" class="metric-value">0</div>
             <div class="metric-desc">Critical traps &amp; waivers</div>
+            <div class="metric-progress-track">
+              <div id="barMetricHigh" class="metric-progress-fill fill-high" style="width: 0%"></div>
+            </div>
           </div>
 
           <div id="cardMetricMedium" class="metric-card metric-medium" role="button" tabindex="0" title="Click to filter Medium Attention clauses">
             <div class="metric-header">
               <span class="metric-indicator-dot"></span>
               <span class="metric-label">Medium Attention</span>
+              <span id="pctMetricMedium" class="metric-pct">0%</span>
             </div>
             <div id="countMedium" class="metric-value">0</div>
             <div class="metric-desc">Notable unilateral terms</div>
+            <div class="metric-progress-track">
+              <div id="barMetricMedium" class="metric-progress-fill fill-medium" style="width: 0%"></div>
+            </div>
           </div>
 
           <div id="cardMetricLow" class="metric-card metric-low" role="button" tabindex="0" title="Click to filter Low Attention clauses">
             <div class="metric-header">
               <span class="metric-indicator-dot"></span>
               <span class="metric-label">Low Attention</span>
+              <span id="pctMetricLow" class="metric-pct">0%</span>
             </div>
             <div id="countLow" class="metric-value">0</div>
             <div class="metric-desc">Standard service terms</div>
+            <div class="metric-progress-track">
+              <div id="barMetricLow" class="metric-progress-fill fill-low" style="width: 0%"></div>
+            </div>
           </div>
 
           <div id="cardMetricInfo" class="metric-card metric-info" role="button" tabindex="0" title="Click to filter Informational clauses">
             <div class="metric-header">
               <span class="metric-indicator-dot"></span>
               <span class="metric-label">Informational</span>
+              <span id="pctMetricInfo" class="metric-pct">0%</span>
             </div>
             <div id="countInfo" class="metric-value">0</div>
             <div class="metric-desc">Definitions &amp; general notes</div>
+            <div class="metric-progress-track">
+              <div id="barMetricInfo" class="metric-progress-fill fill-info" style="width: 0%"></div>
+            </div>
           </div>
 
           <div id="cardMetricRels" class="metric-card metric-rels" role="button" tabindex="0" title="Click to jump to Clause Relationships">
             <div class="metric-header">
               <span class="metric-indicator-dot"></span>
               <span class="metric-label">Relationships</span>
+              <span id="pctMetricRels" class="metric-pct">0</span>
             </div>
             <div id="countRels" class="metric-value">0</div>
             <div class="metric-desc">Cross-clause interactions</div>
+            <div class="metric-progress-track">
+              <div id="barMetricRels" class="metric-progress-fill fill-rels" style="width: 0%"></div>
+            </div>
           </div>
+        </div>
+
+        <!-- Document Anatomy & Risk Heatmap Strip -->
+        <div class="contract-heatmap-card">
+          <div class="heatmap-header">
+            <div class="heatmap-title-group">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <line x1="3" y1="9" x2="21" y2="9"/>
+                <line x1="9" y1="21" x2="9" y2="9"/>
+              </svg>
+              <span class="heatmap-title">Contract Anatomy &amp; Risk Distribution Map</span>
+              <span class="heatmap-subtitle">(Click any clause segment to jump directly to its text)</span>
+            </div>
+            <div class="heatmap-legend">
+              <span class="legend-dot dot-high"></span> Critical Flags
+              <span class="legend-dot dot-med"></span> Notable
+              <span class="legend-dot dot-low"></span> Standard
+              <span class="legend-dot dot-info"></span> Info
+            </div>
+          </div>
+          <div id="contractHeatmapBar" class="contract-heatmap-bar" role="navigation" aria-label="Contract clause heatmap"></div>
+          <div id="heatmapTooltip" class="heatmap-tooltip hidden"></div>
+        </div>
+
+      </div>
+
+      <!-- ===================================================================== -->
+      <!-- SECTION: VISUAL ANALYTICS - CATEGORY DONUT & EXPOSURE MATRIX          -->
+      <!-- ===================================================================== -->
+      <div class="analytics-row-grid">
+        <!-- Card 1: Clause Category Distribution Donut -->
+        <div class="card visual-card category-breakdown-card">
+          <div class="visual-card-header">
+            <div class="visual-header-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 2a10 10 0 0 1 10 10h-10z"/>
+              </svg>
+              <span>Clause Categories &amp; Topic Distribution</span>
+            </div>
+            <span class="visual-header-sub">Interactive Filter</span>
+          </div>
+
+          <div class="category-chart-wrapper">
+            <div class="donut-chart-box">
+              <svg id="categoryDonutSvg" class="donut-svg" viewBox="0 0 180 180">
+                <g id="donutSlicesGroup" transform="rotate(-90 90 90)"></g>
+                <circle cx="90" cy="90" r="54" class="donut-hole"/>
+                <text id="donutCenterCount" x="90" y="86" text-anchor="middle" class="donut-center-num">0</text>
+                <text id="donutCenterLabel" x="90" y="104" text-anchor="middle" class="donut-center-text">Clauses</text>
+              </svg>
+            </div>
+            <div id="categoryLegendList" class="category-legend-list"></div>
+          </div>
+        </div>
+
+        <!-- Card 2: Consumer Rights Risk Exposure Matrix -->
+        <div class="card visual-card risk-matrix-card">
+          <div class="visual-card-header">
+            <div class="visual-header-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              <span>Consumer Protection Exposure Matrix</span>
+            </div>
+            <span class="visual-header-sub">Domain Risk Ratings</span>
+          </div>
+          <div id="riskMatrixList" class="risk-matrix-list"></div>
         </div>
       </div>
 
@@ -446,11 +584,34 @@
         <!-- Column 2: Connected Cross-Clause Relationships -->
         <div class="workbench-col-rels">
           <div class="rels-header-card">
-            <div class="rels-title-group">
-              <span class="rels-badge">Hidden Traps</span>
-              <h3 class="rels-column-title">Connected Relationships</h3>
+            <div class="rels-header-top">
+              <div class="rels-title-group">
+                <span class="rels-badge">Hidden Traps</span>
+                <h3 class="rels-column-title">Connected Relationships</h3>
+              </div>
+              <div class="rel-view-toggle-pills" role="tablist">
+                <button type="button" id="btnRelViewList" class="rel-pill active">Cards</button>
+                <button type="button" id="btnRelViewGraph" class="rel-pill">Network Map</button>
+              </div>
             </div>
             <p class="rels-subtitle">Provisions that create compound risk when combined</p>
+          </div>
+
+          <!-- Network Map Visualizer Container -->
+          <div id="relGraphContainer" class="rel-graph-container hidden">
+            <div class="rel-graph-toolbar">
+              <span class="rel-graph-hint">Interactive Interconnected Traps Web</span>
+              <button type="button" id="btnResetGraph" class="btn btn-secondary btn-xs">Reset Layout</button>
+            </div>
+            <div class="rel-canvas-wrap">
+              <canvas id="relNetworkCanvas" class="rel-network-canvas" width="520" height="420"></canvas>
+              <div id="relGraphTooltip" class="rel-graph-tooltip hidden"></div>
+            </div>
+            <div class="rel-graph-legend">
+              <span class="graph-legend-item"><span class="legend-line line-contradicts"></span> Conflict / Override</span>
+              <span class="graph-legend-item"><span class="legend-line line-modifies"></span> Modification</span>
+              <span class="graph-legend-item"><span class="legend-line line-references"></span> Cross-Reference</span>
+            </div>
           </div>
 
           <!-- Relationships Feed Container -->

@@ -133,13 +133,21 @@ function initDomReferences() {
     // Results Summary
     resSourceType: document.getElementById('resSourceType'),
     resDocId: document.getElementById('resDocId'),
+    resClauseBadge: document.getElementById('resClauseBadge'),
     resDocTitle: document.getElementById('resDocTitle'),
     btnReanalyze: document.getElementById('btnReanalyze'),
     synthesisSummary: document.getElementById('synthesisSummary'),
     synthesisKeyPoints: document.getElementById('synthesisKeyPoints'),
     synthesisDegradedNotice: document.getElementById('synthesisDegradedNotice'),
 
-    // Stat Cards
+    // Visual Gauge & Risk Metrics
+    gaugeValueArc: document.getElementById('gaugeValueArc'),
+    gaugeScoreNumber: document.getElementById('gaugeScoreNumber'),
+    riskVerdictBadge: document.getElementById('riskVerdictBadge'),
+    riskTrapRatio: document.getElementById('riskTrapRatio'),
+    riskCompoundScore: document.getElementById('riskCompoundScore'),
+
+    // Stat Cards & Visual Tracks
     countHigh: document.getElementById('countHigh'),
     countMedium: document.getElementById('countMedium'),
     countLow: document.getElementById('countLow'),
@@ -150,6 +158,36 @@ function initDomReferences() {
     cardMetricLow: document.getElementById('cardMetricLow'),
     cardMetricInfo: document.getElementById('cardMetricInfo'),
     cardMetricRels: document.getElementById('cardMetricRels'),
+    barMetricHigh: document.getElementById('barMetricHigh'),
+    barMetricMedium: document.getElementById('barMetricMedium'),
+    barMetricLow: document.getElementById('barMetricLow'),
+    barMetricInfo: document.getElementById('barMetricInfo'),
+    barMetricRels: document.getElementById('barMetricRels'),
+    pctMetricHigh: document.getElementById('pctMetricHigh'),
+    pctMetricMedium: document.getElementById('pctMetricMedium'),
+    pctMetricLow: document.getElementById('pctMetricLow'),
+    pctMetricInfo: document.getElementById('pctMetricInfo'),
+    pctMetricRels: document.getElementById('pctMetricRels'),
+
+    // Contract Anatomy Heatmap
+    contractHeatmapBar: document.getElementById('contractHeatmapBar'),
+    heatmapTooltip: document.getElementById('heatmapTooltip'),
+
+    // Visual Category Donut & Risk Matrix
+    categoryDonutSvg: document.getElementById('categoryDonutSvg'),
+    donutSlicesGroup: document.getElementById('donutSlicesGroup'),
+    donutCenterCount: document.getElementById('donutCenterCount'),
+    donutCenterLabel: document.getElementById('donutCenterLabel'),
+    categoryLegendList: document.getElementById('categoryLegendList'),
+    riskMatrixList: document.getElementById('riskMatrixList'),
+
+    // Cross-Clause Network Visualization
+    btnRelViewList: document.getElementById('btnRelViewList'),
+    btnRelViewGraph: document.getElementById('btnRelViewGraph'),
+    relGraphContainer: document.getElementById('relGraphContainer'),
+    relNetworkCanvas: document.getElementById('relNetworkCanvas'),
+    relGraphTooltip: document.getElementById('relGraphTooltip'),
+    btnResetGraph: document.getElementById('btnResetGraph'),
 
     // Filters
     clauseSearchInput: document.getElementById('clauseSearchInput'),
@@ -970,6 +1008,19 @@ function renderResultsDashboard() {
   if (qfMedium) qfMedium.textContent = `⚠️ Notable Terms (${medCount})`;
   if (qfStandard) qfStandard.textContent = `ℹ️ Standard Terms (${lowCount + infoCount})`;
 
+  // Update Total Clauses Badge
+  if (dom.resClauseBadge) {
+    dom.resClauseBadge.textContent = `${state.clauses.length} Clauses Analyzed`;
+  }
+
+  // Visual Analytics, Gauges & Donut Breakdown
+  renderRiskGauge(highCount, medCount, lowCount, state.clauses.length, relsCount);
+  renderMetricProgressBars(highCount, medCount, lowCount, infoCount, relsCount, state.clauses.length);
+  renderContractHeatmap();
+  renderCategoryDonut();
+  renderRiskExposureMatrix();
+  initRelationshipNetworkGraph();
+
   // Executive Synthesis
   renderSynthesisBlock();
 
@@ -1007,6 +1058,604 @@ function renderSynthesisBlock() {
     dom.synthesisDegradedNotice.classList.remove('hidden');
     dom.synthesisSummary.textContent = 'Identified contractual clauses and structural relationships based on deterministic risk indicators.';
   }
+}
+
+// ===========================================================================
+// VISUAL DATA VISUALIZATION ENGINE
+// ===========================================================================
+
+// 1. Contract Risk Gauge (Radial SVG Gauge & Dynamic Score Meter)
+function renderRiskGauge(highCount, medCount, lowCount, totalClauses, relsCount) {
+  if (!dom.gaugeValueArc || !dom.gaugeScoreNumber) return;
+
+  const total = Math.max(totalClauses, 1);
+  const rawScore = Math.min(
+    100,
+    Math.round(
+      ((highCount * 30 + medCount * 10 + lowCount * 2) / total) * 20 +
+      Math.min(15, relsCount * 1.5)
+    )
+  );
+
+  let score = rawScore;
+  if (highCount === 0 && medCount === 0) {
+    score = Math.min(15, rawScore);
+  } else if (highCount > 0) {
+    score = Math.max(65, rawScore);
+  } else if (medCount > 0) {
+    score = Math.max(38, Math.min(60, rawScore));
+  }
+
+  // Semi-circle circumference of radius 75 is ~235.6
+  const fullArc = 235.6;
+  const targetOffset = fullArc - (fullArc * (score / 100));
+  dom.gaugeValueArc.style.strokeDasharray = `${fullArc}`;
+  dom.gaugeValueArc.style.strokeDashoffset = `${targetOffset}`;
+
+  // Animated Count-Up
+  animateCountUp(dom.gaugeScoreNumber, score);
+
+  // Risk Verdict Badge
+  if (dom.riskVerdictBadge) {
+    dom.riskVerdictBadge.className = 'risk-verdict-badge';
+    if (score < 30) {
+      dom.riskVerdictBadge.classList.add('verdict-low');
+      dom.riskVerdictBadge.innerHTML = '<span>●</span> Standard Agreement';
+    } else if (score <= 60) {
+      dom.riskVerdictBadge.classList.add('verdict-moderate');
+      dom.riskVerdictBadge.innerHTML = '<span>●</span> Moderate Caution';
+    } else {
+      dom.riskVerdictBadge.classList.add('verdict-high');
+      dom.riskVerdictBadge.innerHTML = '<span>●</span> Critical Traps Detected';
+    }
+  }
+
+  // Submetrics
+  if (dom.riskTrapRatio) {
+    const ratio = Math.round(((highCount + medCount) / total) * 100);
+    dom.riskTrapRatio.textContent = `${ratio}%`;
+  }
+  if (dom.riskCompoundScore) {
+    dom.riskCompoundScore.textContent = `${relsCount} traps`;
+  }
+}
+
+function animateCountUp(element, target, duration = 800) {
+  if (!element) return;
+  const start = 0;
+  const startTime = performance.now();
+  function update(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    const current = Math.round(start + (target - start) * ease);
+    element.textContent = current;
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    } else {
+      element.textContent = target;
+    }
+  }
+  requestAnimationFrame(update);
+}
+
+// 2. Metric Progress Bars
+function renderMetricProgressBars(highCount, medCount, lowCount, infoCount, relsCount, totalClauses) {
+  const total = Math.max(totalClauses, 1);
+  const pHigh = Math.round((highCount / total) * 100);
+  const pMed = Math.round((medCount / total) * 100);
+  const pLow = Math.round((lowCount / total) * 100);
+  const pInfo = Math.round((infoCount / total) * 100);
+
+  if (dom.barMetricHigh) dom.barMetricHigh.style.width = `${pHigh}%`;
+  if (dom.barMetricMedium) dom.barMetricMedium.style.width = `${pMed}%`;
+  if (dom.barMetricLow) dom.barMetricLow.style.width = `${pLow}%`;
+  if (dom.barMetricInfo) dom.barMetricInfo.style.width = `${pInfo}%`;
+  if (dom.barMetricRels) dom.barMetricRels.style.width = `${Math.min(100, relsCount)}%`;
+
+  if (dom.pctMetricHigh) dom.pctMetricHigh.textContent = `${pHigh}%`;
+  if (dom.pctMetricMedium) dom.pctMetricMedium.textContent = `${pMed}%`;
+  if (dom.pctMetricLow) dom.pctMetricLow.textContent = `${pLow}%`;
+  if (dom.pctMetricInfo) dom.pctMetricInfo.textContent = `${pInfo}%`;
+  if (dom.pctMetricRels) dom.pctMetricRels.textContent = `${relsCount}`;
+}
+
+// 3. Contract Anatomy / Document Risk Heatmap Strip
+function renderContractHeatmap() {
+  if (!dom.contractHeatmapBar) return;
+  dom.contractHeatmapBar.innerHTML = '';
+  const tooltip = dom.heatmapTooltip;
+
+  state.clauses.forEach((c) => {
+    const seg = document.createElement('div');
+    seg.className = 'heatmap-segment';
+    seg.setAttribute('data-clause-id', c.clause_id);
+
+    if (c.attention_level === 'High Attention') {
+      seg.style.backgroundColor = '#EF4444';
+    } else if (c.attention_level === 'Medium Attention') {
+      seg.style.backgroundColor = '#F59E0B';
+    } else if (c.attention_level === 'Low Attention') {
+      seg.style.backgroundColor = '#10B981';
+    } else {
+      seg.style.backgroundColor = '#3B82F6';
+    }
+
+    seg.addEventListener('mouseenter', (e) => {
+      if (!tooltip) return;
+      const title = c.section_title || `Clause ${c.clause_index}`;
+      const level = c.attention_level || 'Standard';
+      tooltip.innerHTML = `
+        <div style="font-weight: 700; color: #FFFFFF; margin-bottom: 2px;">#${c.clause_index}: ${escapeHtml(title)}</div>
+        <div style="color: ${seg.style.backgroundColor}; font-weight: 600; font-size: 11px; margin-bottom: 4px;">${level}</div>
+        <div style="color: var(--text-muted); font-size: 11px; max-height: 40px; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(c.text.slice(0, 90))}...</div>
+      `;
+      tooltip.classList.remove('hidden');
+      positionTooltip(e, tooltip);
+    });
+
+    seg.addEventListener('mousemove', (e) => {
+      if (tooltip && !tooltip.classList.contains('hidden')) {
+        positionTooltip(e, tooltip);
+      }
+    });
+
+    seg.addEventListener('mouseleave', () => {
+      if (tooltip) tooltip.classList.add('hidden');
+    });
+
+    seg.addEventListener('click', () => {
+      scrollToClause(c.clause_id);
+    });
+
+    dom.contractHeatmapBar.appendChild(seg);
+  });
+}
+
+function positionTooltip(e, tooltip) {
+  const x = Math.min(window.innerWidth - 300, Math.max(10, e.clientX - 100));
+  const y = e.clientY - 85;
+  tooltip.style.left = `${x}px`;
+  tooltip.style.top = `${y}px`;
+}
+
+function scrollToClause(clauseId) {
+  const target = state.clauses.find(c => c.clause_id === clauseId);
+  if (target) {
+    if (state.activeAttentionFilter !== 'ALL' && state.activeAttentionFilter !== target.attention_level) {
+      setAttentionFilter('ALL');
+    }
+    if (state.activeCategoryFilter !== 'ALL' && state.activeCategoryFilter !== target.primary_category) {
+      state.activeCategoryFilter = 'ALL';
+      if (dom.categoryFilter) dom.categoryFilter.value = 'ALL';
+      renderFilteredClauses();
+    }
+  }
+
+  setTimeout(() => {
+    const el = document.getElementById(`clause-card-${clauseId}`);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      el.classList.add('highlight-pulse');
+      setTimeout(() => el.classList.remove('highlight-pulse'), 2000);
+    }
+  }, 100);
+}
+
+// 4. Clause Category Breakdown (Interactive SVG Donut Chart)
+const CATEGORY_COLORS = {
+  'Privacy & Data': '#06B6D4',
+  'Payment': '#10B981',
+  'Dispute': '#EF4444',
+  'Liability': '#F97316',
+  'User Content': '#8B5CF6',
+  'Changes': '#F59E0B',
+  'Account': '#EC4899',
+  'General': '#64748B',
+};
+
+function renderCategoryDonut() {
+  if (!dom.donutSlicesGroup || !dom.categoryLegendList) return;
+  dom.donutSlicesGroup.innerHTML = '';
+  dom.categoryLegendList.innerHTML = '';
+
+  const total = Math.max(state.clauses.length, 1);
+  dom.donutCenterCount.textContent = state.clauses.length;
+  dom.donutCenterLabel.textContent = 'Clauses';
+
+  const counts = {};
+  state.clauses.forEach(c => {
+    const cat = c.primary_category || c.category || 'General';
+    counts[cat] = (counts[cat] || 0) + 1;
+  });
+
+  const sortedCats = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+  const radius = 68;
+  const circumference = 2 * Math.PI * radius;
+  let accumulatedOffset = 0;
+
+  sortedCats.forEach(([cat, count]) => {
+    const fraction = count / total;
+    const sliceLength = fraction * circumference;
+    const color = CATEGORY_COLORS[cat] || '#818CF8';
+
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', '90');
+    circle.setAttribute('cy', '90');
+    circle.setAttribute('r', radius);
+    circle.setAttribute('stroke', color);
+    circle.setAttribute('stroke-dasharray', `${sliceLength} ${circumference - sliceLength}`);
+    circle.setAttribute('stroke-dashoffset', `${-accumulatedOffset}`);
+    circle.setAttribute('class', 'donut-slice');
+    circle.setAttribute('data-category', cat);
+
+    circle.addEventListener('mouseenter', () => {
+      dom.donutCenterCount.textContent = count;
+      dom.donutCenterLabel.textContent = cat;
+      circle.style.stroke = '#FFFFFF';
+    });
+    circle.addEventListener('mouseleave', () => {
+      dom.donutCenterCount.textContent = state.clauses.length;
+      dom.donutCenterLabel.textContent = 'Clauses';
+      circle.style.stroke = color;
+    });
+
+    circle.addEventListener('click', () => {
+      filterByCategory(cat);
+    });
+
+    dom.donutSlicesGroup.appendChild(circle);
+    accumulatedOffset += sliceLength;
+
+    const legItem = document.createElement('div');
+    legItem.className = 'category-legend-item';
+    legItem.setAttribute('data-category', cat);
+    legItem.innerHTML = `
+      <div class="cat-legend-left">
+        <span class="cat-color-dot" style="background: ${color}"></span>
+        <span class="cat-name">${escapeHtml(cat)}</span>
+      </div>
+      <span class="cat-count-pill">${count} (${Math.round(fraction * 100)}%)</span>
+    `;
+
+    legItem.addEventListener('mouseenter', () => {
+      circle.dispatchEvent(new Event('mouseenter'));
+    });
+    legItem.addEventListener('mouseleave', () => {
+      circle.dispatchEvent(new Event('mouseleave'));
+    });
+    legItem.addEventListener('click', () => {
+      filterByCategory(cat);
+    });
+
+    dom.categoryLegendList.appendChild(legItem);
+  });
+}
+
+function filterByCategory(cat) {
+  if (!dom.categoryFilter) return;
+  dom.categoryFilter.value = cat;
+  state.activeCategoryFilter = cat;
+  renderFilteredClauses();
+  if (dom.clausesContainer) {
+    dom.clausesContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
+// 5. Consumer Rights Exposure Matrix
+function renderRiskExposureMatrix() {
+  if (!dom.riskMatrixList) return;
+  dom.riskMatrixList.innerHTML = '';
+
+  const domains = [
+    {
+      id: 'unilateral',
+      title: 'Unilateral Changes & Pricing',
+      icon: '⚡',
+      keywords: ['modify', 'replace', 'change', 'discretion', 'without notice'],
+      categories: ['Changes'],
+      desc: 'Can the company modify terms or raise prices without direct notice?',
+    },
+    {
+      id: 'dispute',
+      title: 'Forced Arbitration & Waivers',
+      icon: '⚖️',
+      keywords: ['arbitration', 'waive', 'class action', 'jury', 'dispute'],
+      categories: ['Dispute'],
+      desc: 'Mandatory individual arbitration and surrender of court litigation rights.',
+    },
+    {
+      id: 'content',
+      title: 'Content Rights & IP License',
+      icon: '📜',
+      keywords: ['license', 'royalty-free', 'perpetual', 'sublicense', 'derivative works'],
+      categories: ['User Content'],
+      desc: 'Scope of rights granted over user submissions, media, and data.',
+    },
+    {
+      id: 'liability',
+      title: 'Liability Shield & Disclaimers',
+      icon: '🛡️',
+      keywords: ['limitation of liability', 'damages', 'as is', 'consequential'],
+      categories: ['Liability'],
+      desc: 'Company immunity for service outages, data losses, or breaches.',
+    },
+  ];
+
+  domains.forEach(d => {
+    const matches = state.clauses.filter(c => {
+      const catMatch = d.categories.includes(c.primary_category);
+      const textMatch = d.keywords.some(k => (c.text || '').toLowerCase().includes(k));
+      return catMatch || textMatch;
+    });
+
+    const highMatches = matches.filter(c => c.attention_level === 'High Attention').length;
+    const medMatches = matches.filter(c => c.attention_level === 'Medium Attention').length;
+
+    let status = 'Guarded';
+    let pillClass = 'pill-guarded';
+    let fillWidth = 20;
+    let fillColor = '#10B981';
+
+    if (highMatches > 0) {
+      status = 'Flagged';
+      pillClass = 'pill-flagged';
+      fillWidth = 90;
+      fillColor = '#EF4444';
+    } else if (medMatches > 0 || matches.length > 2) {
+      status = 'Notable';
+      pillClass = 'pill-notable';
+      fillWidth = 60;
+      fillColor = '#F59E0B';
+    }
+
+    const item = document.createElement('div');
+    item.className = 'risk-matrix-item';
+    item.innerHTML = `
+      <div class="matrix-item-header">
+        <span class="matrix-item-title">${d.icon} ${d.title}</span>
+        <span class="matrix-pill ${pillClass}">${status}</span>
+      </div>
+      <div class="matrix-bar-track">
+        <div class="matrix-bar-fill" style="width: ${fillWidth}%; background: ${fillColor}"></div>
+      </div>
+      <div class="matrix-item-desc">${matches.length} provisions identified &bull; ${d.desc}</div>
+    `;
+
+    dom.riskMatrixList.appendChild(item);
+  });
+}
+
+// 6. Interactive Cross-Clause Network Visualization
+let graphAnimationId = null;
+let graphNodes = [];
+let graphLinks = [];
+let hoveredNode = null;
+let draggedNode = null;
+let graphInitialized = false;
+
+function initRelationshipNetworkGraph() {
+  if (!dom.btnRelViewList || !dom.btnRelViewGraph) return;
+
+  if (!graphInitialized) {
+    graphInitialized = true;
+    dom.btnRelViewList.addEventListener('click', () => {
+      dom.btnRelViewList.classList.add('active');
+      dom.btnRelViewGraph.classList.remove('active');
+      dom.relationshipsContainer.classList.remove('hidden');
+      dom.relGraphContainer.classList.add('hidden');
+    });
+
+    dom.btnRelViewGraph.addEventListener('click', () => {
+      dom.btnRelViewGraph.classList.add('active');
+      dom.btnRelViewList.classList.remove('active');
+      dom.relationshipsContainer.classList.add('hidden');
+      dom.relGraphContainer.classList.remove('hidden');
+      buildNetworkGraphData();
+    });
+
+    if (dom.btnResetGraph) {
+      dom.btnResetGraph.addEventListener('click', () => {
+        buildNetworkGraphData();
+      });
+    }
+  }
+
+  // If graph is currently visible, rebuild data
+  if (dom.relGraphContainer && !dom.relGraphContainer.classList.contains('hidden')) {
+    buildNetworkGraphData();
+  }
+}
+
+function buildNetworkGraphData() {
+  const canvas = dom.relNetworkCanvas;
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  const nodeMap = new Map();
+  state.relationships.forEach(r => {
+    if (!nodeMap.has(r.source_clause_id)) {
+      const c = state.clauses.find(item => item.clause_id === r.source_clause_id);
+      if (c) nodeMap.set(r.source_clause_id, c);
+    }
+    if (!nodeMap.has(r.target_clause_id)) {
+      const c = state.clauses.find(item => item.clause_id === r.target_clause_id);
+      if (c) nodeMap.set(r.target_clause_id, c);
+    }
+  });
+
+  const clausesList = Array.from(nodeMap.values()).slice(0, 24);
+  const width = canvas.width;
+  const height = canvas.height;
+  const centerX = width / 2;
+  const centerY = height / 2;
+  const radius = Math.min(width, height) * 0.38;
+
+  graphNodes = clausesList.map((c, i) => {
+    const angle = (i / clausesList.length) * 2 * Math.PI;
+    return {
+      clause: c,
+      id: c.clause_id,
+      x: centerX + Math.cos(angle) * radius,
+      y: centerY + Math.sin(angle) * radius,
+      radius: c.attention_level === 'High Attention' ? 18 : (c.attention_level === 'Medium Attention' ? 16 : 14),
+      color: c.attention_level === 'High Attention' ? '#EF4444' : (c.attention_level === 'Medium Attention' ? '#F59E0B' : '#06B6D4'),
+    };
+  });
+
+  const nodeObjMap = new Map(graphNodes.map(n => [n.id, n]));
+
+  graphLinks = state.relationships
+    .filter(r => nodeObjMap.has(r.source_clause_id) && nodeObjMap.has(r.target_clause_id))
+    .slice(0, 50)
+    .map(r => ({
+      source: nodeObjMap.get(r.source_clause_id),
+      target: nodeObjMap.get(r.target_clause_id),
+      rel: r,
+    }));
+
+  setupCanvasInteraction(canvas);
+  startGraphAnimation(canvas, ctx);
+}
+
+function startGraphAnimation(canvas, ctx) {
+  if (graphAnimationId) cancelAnimationFrame(graphAnimationId);
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw connecting links
+    graphLinks.forEach(link => {
+      const isHighlighted = hoveredNode && (hoveredNode === link.source || hoveredNode === link.target);
+      const isDimmed = hoveredNode && !isHighlighted;
+
+      ctx.beginPath();
+      ctx.moveTo(link.source.x, link.source.y);
+      ctx.lineTo(link.target.x, link.target.y);
+
+      let strokeColor = 'rgba(99, 102, 241, 0.25)';
+      const type = (link.rel.relationship_type || '').toLowerCase();
+      if (type.includes('contradict') || type.includes('conflict')) {
+        strokeColor = isHighlighted ? 'rgba(239, 68, 68, 0.95)' : (isDimmed ? 'rgba(239, 68, 68, 0.08)' : 'rgba(239, 68, 68, 0.45)');
+      } else if (type.includes('modify') || type.includes('override')) {
+        strokeColor = isHighlighted ? 'rgba(245, 158, 11, 0.95)' : (isDimmed ? 'rgba(245, 158, 11, 0.08)' : 'rgba(245, 158, 11, 0.4)');
+      } else {
+        strokeColor = isHighlighted ? 'rgba(6, 182, 212, 0.95)' : (isDimmed ? 'rgba(6, 182, 212, 0.08)' : 'rgba(6, 182, 212, 0.35)');
+      }
+
+      ctx.strokeStyle = strokeColor;
+      ctx.lineWidth = isHighlighted ? 2.5 : 1.2;
+      ctx.stroke();
+    });
+
+    // Draw nodes
+    graphNodes.forEach(node => {
+      const isHovered = (hoveredNode === node);
+      const isConnected = hoveredNode && graphLinks.some(l => (l.source === hoveredNode && l.target === node) || (l.target === hoveredNode && l.source === node));
+      const isDimmed = hoveredNode && !isHovered && !isConnected;
+
+      if (isHovered) {
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, node.radius + 6, 0, Math.PI * 2);
+        ctx.fillStyle = node.color;
+        ctx.globalAlpha = 0.35;
+        ctx.fill();
+        ctx.globalAlpha = 1.0;
+      }
+
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+      ctx.fillStyle = isDimmed ? '#1F2937' : node.color;
+      ctx.fill();
+      ctx.strokeStyle = isHovered ? '#FFFFFF' : '#111827';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = 'bold 10px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(`C${node.clause.clause_index}`, node.x, node.y);
+    });
+
+    graphAnimationId = requestAnimationFrame(draw);
+  }
+
+  draw();
+}
+
+function setupCanvasInteraction(canvas) {
+  const tooltip = dom.relGraphTooltip;
+
+  function getNodeAt(x, y) {
+    return graphNodes.find(n => {
+      const dx = n.x - x;
+      const dy = n.y - y;
+      return (dx * dx + dy * dy) <= (n.radius * n.radius);
+    });
+  }
+
+  canvas.onmousemove = (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left) * (canvas.width / rect.width);
+    const y = (e.clientY - rect.top) * (canvas.height / rect.height);
+
+    if (draggedNode) {
+      draggedNode.x = x;
+      draggedNode.y = y;
+      return;
+    }
+
+    const node = getNodeAt(x, y);
+    hoveredNode = node || null;
+
+    if (node && tooltip) {
+      const c = node.clause;
+      const conns = graphLinks.filter(l => l.source === node || l.target === node).length;
+      tooltip.innerHTML = `
+        <div style="font-weight: 700; color: #FFFFFF; margin-bottom: 2px;">#${c.clause_index}: ${escapeHtml(c.section_title || 'General')}</div>
+        <div style="color: ${node.color}; font-weight: 600; font-size: 11px; margin-bottom: 4px;">${c.attention_level} &bull; ${conns} Connections</div>
+        <div style="color: var(--text-muted); font-size: 11px;">Click node to jump to clause text</div>
+      `;
+      tooltip.classList.remove('hidden');
+      const tipX = Math.min(canvas.clientWidth - 220, Math.max(10, e.clientX - rect.left - 50));
+      const tipY = Math.max(10, e.clientY - rect.top - 80);
+      tooltip.style.left = `${tipX}px`;
+      tooltip.style.top = `${tipY}px`;
+    } else if (tooltip) {
+      tooltip.classList.add('hidden');
+    }
+  };
+
+  canvas.onmousedown = (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left) * (canvas.width / rect.width);
+    const y = (e.clientY - rect.top) * (canvas.height / rect.height);
+    const node = getNodeAt(x, y);
+    if (node) {
+      draggedNode = node;
+    }
+  };
+
+  window.onmouseup = () => {
+    draggedNode = null;
+  };
+
+  canvas.onclick = (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left) * (canvas.width / rect.width);
+    const y = (e.clientY - rect.top) * (canvas.height / rect.height);
+    const node = getNodeAt(x, y);
+    if (node) {
+      scrollToClause(node.clause.clause_id);
+    }
+  };
+
+  canvas.onmouseleave = () => {
+    hoveredNode = null;
+    draggedNode = null;
+    if (tooltip) tooltip.classList.add('hidden');
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -1075,6 +1724,7 @@ function renderFilteredClauses() {
     const card = document.createElement('div');
     const attClass = getAttentionCardClass(clause.attention_level);
     card.className = `clause-card ${attClass}`;
+    card.id = `clause-card-${clause.clause_id}`;
     card.setAttribute('role', 'listitem');
 
     // Relationships count for this clause
